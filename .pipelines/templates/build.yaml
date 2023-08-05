@@ -6,6 +6,8 @@ jobs:
   pool:
     vmImage: ubuntu-latest
   displayName: Build Bicep and Function App
+  variables:
+    functionPublishPath: '$(build.artifactstagingdirectory)/functionapp'
   steps:
     - task: PowerShell@2
       displayName: Generate ARM parameters from *.bicepparam
@@ -13,9 +15,37 @@ jobs:
         workingDirectory: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/
         filePath: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/update-arm-params.ps1
 
+    - task: UseDotNet@2
+      displayName: Setup .NET Core SDK
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
+
+    - script: |
+        dotnet restore
+        dotnet build --configuration Release --runtime linux-x64 --self-contained false
+      displayName: Build Function App
+    
+    - task: DotNetCoreCLI@2
+      displayName: Publish Function App
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: '**/*.csproj'
+        arguments: '--configuration Release --output $(functionPublishPath) --runtime linux-x64 --self-contained false'
+        modifyOutputPath: false
+        zipAfterPublish: true
+        workingDirectory: './'
+
     - task: PublishPipelineArtifact@1
       displayName: Publish Infrastructure Artifacts
       inputs:
         artifactName: Infrastructure
         targetPath: $(System.DefaultWorkingDirectory)/.infrastructure/
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Function App Artifact
+      inputs:
+        artifactName: FunctionApp
+        targetPath: $(functionPublishPath)
   
