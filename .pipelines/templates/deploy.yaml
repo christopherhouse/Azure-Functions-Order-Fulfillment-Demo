@@ -38,6 +38,6 @@ stages:
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 csmFile: $(infraTemplate)
                 csmParametersFile: $(parameterFile)
-                deploymentName: $$(Build.BuildId)
+                deploymentName: $(Build.BuildId)
                 overrideParameters: '-buildId $$(Build.BuildId)'
                 location: ${{ parameters.deploymentRegion }}
