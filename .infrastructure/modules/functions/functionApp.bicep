@@ -4,6 +4,11 @@ param appServicePlanId string
 param managedIdentityResourceId string
 param storageAccountName string
 
+resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+  name: storageAccountName
+  scope: resourceGroup()
+}
+
 resource app 'Microsoft.Web/sites@2022-09-01' = {
   name: functionAppName
   location: location
@@ -31,6 +36,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
+        }
+        {
+          name: 'AzureWebJobsStorage'
+          value: storage.listKeys().keys[0].value
         }
       ]
     }
