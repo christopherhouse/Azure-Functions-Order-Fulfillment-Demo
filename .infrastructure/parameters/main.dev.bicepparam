@@ -11,4 +11,5 @@ param ordersTopicSubscriptionName = 'auto-approved-orders'
 param ordersForApprovalSubscriptionName = 'orders-requiring-approval'
 param ordersTopicSqlFilter = 'user.orderTotal <= 1000'
 param ordersForApprovalSqlFilter = 'user.orderTotal >= 1000'
-param buildId = 1
+param fulfillmentTopicName = 'orders-for-fulfillment'
+param buildId = 2

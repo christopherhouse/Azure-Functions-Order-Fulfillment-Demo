@@ -14,6 +14,7 @@ param ordersTopicSubscriptionName string
 param ordersForApprovalSubscriptionName string
 param ordersTopicSqlFilter string
 param ordersForApprovalSqlFilter string
+param fulfillmentTopicName string
 
 param buildId int = 0
 
@@ -23,6 +24,7 @@ var serviceBusNamespaceName = '${baseName}-sbns'
 
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
 var ordersTopicDeploymentName= '${ordersTopicName}-${buildId}'
+var fulfillmentTopicDeploymentName= '${fulfillmentTopicName}-${buildId}'
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -49,6 +51,7 @@ module ordersSubscription './modules/serviceBus/serviceBusTopicSubscription.bice
     topicName: autoApprovedOrdersTopic.outputs.name
     subscriptionName: ordersTopicSubscriptionName
     sqlFilterExpression: ordersTopicSqlFilter
+    forwardToTopicName: fulfillmentTopic.outputs.name
   }
 }
 
@@ -59,5 +62,14 @@ module ordersForApprovalSubscription './modules/serviceBus/serviceBusTopicSubscr
     topicName: autoApprovedOrdersTopic.outputs.name
     subscriptionName: ordersForApprovalSubscriptionName
     sqlFilterExpression: ordersForApprovalSqlFilter
+  }
+}
+
+module fulfillmentTopic './modules/serviceBus/serviceBusTopic.bicep' = {
+  name: fulfillmentTopicDeploymentName
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    topicName: fulfillmentTopicName
+    maxTopicSize: maxTopicSize
   }
 }
