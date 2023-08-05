@@ -23,13 +23,14 @@ param buildId int = 0
 var keyVaultApplicationIdentities = []
 
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
+var baseNameNoDashes = replace(baseName, '-', '')
 
 // Resource Names
 var serviceBusNamespaceName = '${baseName}-sbns'
 var logAnalyticsWorkspaceName = '${baseName}-laws'
 var functionsAppInsightsName = '${baseName}-func-ai'
 var keyVaultName = '${baseName}-kv'
-var storageAccountName = length('${baseName}sa') > 24 ? toLower(substring('${baseName}sa', 0, 24)) : toLower('${baseName}sa')
+var storageAccountName = length('${baseNameNoDashes}sa') > 24 ? toLower(substring('${baseNameNoDashes}sa', 0, 24)) : toLower('${baseNameNoDashes}sa')
 var functionAppServicePlanName = '${baseName}-func-asp'
 var functionAppName = '${baseName}-func'
 var functionAppUserAssignedIdentityName = '${functionAppName}-uami'
