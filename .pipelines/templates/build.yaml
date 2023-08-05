@@ -40,12 +40,17 @@ jobs:
     - task: PublishPipelineArtifact@1
       displayName: Publish Infrastructure Artifacts
       inputs:
-        artifactName: Infrastructure
+        artifactName: infrastructure
         targetPath: $(System.DefaultWorkingDirectory)/.infrastructure/
     
     - task: PublishPipelineArtifact@1
       displayName: Publish Function App Artifact
       inputs:
-        artifactName: FunctionApp
+        artifactName: functionspp
         targetPath: $(functionPublishPath)
-  
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Pipeline Scripts
+      inputs:
+        artifactName: scripts
+        targetPath: $(System.DefaultWorkingDirectory)/.pipelines/scripts/

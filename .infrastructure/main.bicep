@@ -19,9 +19,6 @@ param keyVaultAdminIdentities array = []
 
 param buildId int = 0
 
-// Temp variables (will not need when complete)
-var keyVaultApplicationIdentities = []
-
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 var baseNameNoDashes = replace(baseName, '-', '')
 
@@ -156,3 +153,5 @@ module funcApp './modules/functions/functionApp.bicep' = {
     storageAccountName: funcStorage.outputs.name
   }
 }
+
+output functionAppName string = funcApp.outputs.name

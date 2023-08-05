@@ -19,8 +19,10 @@ stages:
         vmImage: ubuntu-latest
       environment: ${{ parameters.environmentName }}
       variables:
-        infraTemplate: $(Pipeline.Workspace)/Infrastructure/main.bicep
-        parameterFile: $(Pipeline.Workspace)/Infrastructure/parameters/main.${{ parameters.environmentName }}.json
+        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.bicep
+        parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
+        variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.
+        functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
       strategy:
         runOnce:
           deploy:
@@ -28,7 +30,17 @@ stages:
             - task: DownloadPipelineArtifact@2
               displayName: Download Infrastructure Artifact
               inputs:
-                artifact: 'Infrastructure'
+                artifact: 'infrastructure'
+            
+            - task: DownloadPipelineArtifact@2
+              displayName: Download Pipeline Scritps Artifact
+              inputs:
+                artifact: scripts
+            
+            - task: DownloadPipelineArtifact@2
+              displayName: Download Function App Artifact
+              inputs:
+                artifact: functionapp
             
             - task: AzureResourceManagerTemplateDeployment@3
               displayName: Deploy Infrastructure to ${{ parameters.environmentName }}
@@ -41,3 +53,18 @@ stages:
                 deploymentName: $(Build.BuildId)
                 overrideParameters: '-buildId $(Build.BuildId)'
                 location: ${{ parameters.deploymentRegion }}
+                deploymentOutputs: infraOutputs
+            
+            - task: PowerShell@2
+              displayName: Set Variables from Deployment Output
+              inputs:
+                filePath: $(variableScriptFile)
+                arguments: -armOutputString $(infraOutputs)
+            
+            - task: AzureFunctionApp@1
+              displayName: Deploy Order Fulfillment Function App
+              inputs:
+                azureSubscription: ${{ parameters.serviceConnectionName }}
+                appType: functionAppLinux
+                appName: $(functionAppName)
+                package: $(functionPackage)
