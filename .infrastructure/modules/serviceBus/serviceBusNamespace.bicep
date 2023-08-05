@@ -6,6 +6,7 @@ param location string
   'Premium'
 ])
 param serviceBusSku string
+param tags object
 
 resource sbns 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
   name: serviceBusNamespaceName
@@ -13,6 +14,7 @@ resource sbns 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
   sku: {
     name: serviceBusSku
   }
+  tags: tags
 }
 
 output id string = sbns.id

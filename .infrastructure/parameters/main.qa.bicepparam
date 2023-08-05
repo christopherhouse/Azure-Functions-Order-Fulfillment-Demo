@@ -2,7 +2,7 @@ using '../main.bicep'
 
 param workloadPrefix = 'cmh'
 param workloadName = 'ordering'
-param environmentName = 'dev'
+param environmentName = 'qa'
 param location = 'eastus'
 param serviceBusSku = 'Standard'
 param maxTopicSize = 2048

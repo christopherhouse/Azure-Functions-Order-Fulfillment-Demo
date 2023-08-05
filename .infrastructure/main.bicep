@@ -1,3 +1,4 @@
+param deploymentDate string = utcNow()
 param workloadPrefix string
 param workloadName string
 param environmentName string
@@ -15,16 +16,42 @@ param ordersForApprovalSubscriptionName string
 param ordersTopicSqlFilter string
 param ordersForApprovalSqlFilter string
 param fulfillmentTopicName string
+param keyVaultAdminIdentities array = []
 
 param buildId int = 0
 
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
+var baseNameNoDashes = replace(baseName, '-', '')
 
+// Resource Names
 var serviceBusNamespaceName = '${baseName}-sbns'
+var logAnalyticsWorkspaceName = '${baseName}-laws'
+var functionsAppInsightsName = '${baseName}-func-ai'
+var keyVaultName = '${baseName}-kv'
+var storageAccountName = length('${baseNameNoDashes}sa') > 24 ? toLower(substring('${baseNameNoDashes}sa', 0, 24)) : toLower('${baseNameNoDashes}sa')
+var functionAppServicePlanName = '${baseName}-func-asp'
+var functionAppName = '${baseName}-func'
+var functionAppUserAssignedIdentityName = '${functionAppName}-uami'
 
+// Deployment Names
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
 var ordersTopicDeploymentName= '${ordersTopicName}-${buildId}'
-var fulfillmentTopicDeploymentName= '${fulfillmentTopicName}-${buildId}'
+var fulfillmentTopicDeploymentName = '${fulfillmentTopicName}-${buildId}'
+var logAnalyticsDeploymentName = '${logAnalyticsWorkspaceName}-${buildId}'
+var functionsAppInsightsDeploymentName = '${functionsAppInsightsName}-${buildId}'
+var keyVaultDeploymentName = '${keyVaultName}-${buildId}'
+var storageAccountDeploymentName = '${storageAccountName}-${buildId}'
+var functionAppServicePlanDeploymentName = '${functionAppServicePlanName}-${buildId}'
+var functionAppDeploymentName = '${functionAppName}-${buildId}'
+var functionAppUserAssignedIdentityDeploymentName = '${functionAppUserAssignedIdentityName}-${buildId}'
+var secretsDeploymentName = 'secrets-${buildId}'
+
+var tags = {
+  BuildId: buildId
+  Environment: environmentName
+  Workload: workloadName
+  LastDeploymentDate: deploymentDate
+}
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -32,6 +59,7 @@ module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
     serviceBusNamespaceName: serviceBusNamespaceName
     location: location
     serviceBusSku: serviceBusSku
+    tags: tags
   }
 }
 
@@ -73,3 +101,84 @@ module fulfillmentTopic './modules/serviceBus/serviceBusTopic.bicep' = {
     maxTopicSize: maxTopicSize
   }
 }
+
+module laws './modules/observability/logAnalyticsWorkspace.bicep' = {
+  name: logAnalyticsDeploymentName
+  params: {
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+    location: location
+    tags: tags
+  }
+}
+
+module funcAppInsights './modules/observability/applicationInsights.bicep' = {
+  name: functionsAppInsightsDeploymentName
+  params: {
+    appInsightsName: functionsAppInsightsName
+    location: location
+    logAnalyticsWorkspaceId: laws.outputs.id
+    tags: tags
+  }
+}
+
+module kv './modules/keyVault/keyVault.bicep' = {
+  name: keyVaultDeploymentName
+  params: {
+    keyVaultName: keyVaultName
+    location: location
+    adminIdentities: keyVaultAdminIdentities
+    applicationIdentities: [ funcUami.outputs.principalId ]
+    tags: tags
+  }
+}
+
+module funcStorage './modules/storageAccount.bicep' = {
+  name: storageAccountDeploymentName
+  params: {
+    storageAccountName: storageAccountName
+    location: location
+    tags: tags
+  }
+}
+
+module funcUami './modules/userAssignedManagedIdentity.bicep' = {
+  name: functionAppUserAssignedIdentityDeploymentName
+  params: {
+    managedIdentityName: functionAppUserAssignedIdentityName
+    location: location
+    tags: tags
+  }
+}
+
+module funcAsp './modules/functions/appServicePlan.bicep' = {
+  name: functionAppServicePlanDeploymentName
+  params: {
+    appServicePlanName: functionAppServicePlanName
+    location: location
+    tags: tags
+  }
+}
+
+module funcApp './modules/functions/functionApp.bicep' = {
+  name: functionAppDeploymentName
+  params: {
+    location: location
+    appServicePlanId: funcAsp.outputs.name
+    functionAppName: functionAppName
+    managedIdentityResourceId: funcUami.outputs.id
+    storageAccountName: funcStorage.outputs.name
+    appInsightsInstrumentationkeySecretUri: secrets.outputs.appInsightsInstrumentationkeyUri
+    tags: tags
+  }
+}
+
+module secrets './modules/keyVault/secrets.bicep' = {
+  name: secretsDeploymentName
+  params: {
+    appInsightsName: funcAppInsights.outputs.name
+    buildId: buildId
+    keyVaultName: kv.outputs.name
+  }
+}
+
+output functionAppName string = funcApp.outputs.name

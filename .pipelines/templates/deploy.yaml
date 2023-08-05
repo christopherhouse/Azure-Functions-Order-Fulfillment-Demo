@@ -1,0 +1,70 @@
+parameters:
+- name: serviceConnectionName
+  type: string
+- name: environmentName
+  type: string
+- name: resourceGroupName
+  type: string
+- name: deploymentRegion
+  type: string
+  default: 'eastus'
+
+stages:
+  - stage: Deploy_to__${{ parameters.environmentName }}
+    displayName: Deploy to ${{ parameters.environmentName }}
+    jobs:
+    - deployment: ${{ parameters.environmentName }}_Deployment
+      displayName: ${{ parameters.environmentName }} Deployment
+      pool:
+        vmImage: ubuntu-latest
+      environment: ${{ parameters.environmentName }}
+      variables:
+        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.bicep
+        parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
+        variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.ps1
+        functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: DownloadPipelineArtifact@2
+              displayName: Download Infrastructure Artifact
+              inputs:
+                artifact: 'infrastructure'
+            
+            - task: DownloadPipelineArtifact@2
+              displayName: Download Pipeline Scritps Artifact
+              inputs:
+                artifact: scripts
+            
+            - task: DownloadPipelineArtifact@2
+              displayName: Download Function App Artifact
+              inputs:
+                artifact: functionapp
+            
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: Deploy Infrastructure to ${{ parameters.environmentName }}
+              inputs:
+                deploymentScope: Resource Group
+                azureResourceManagerConnection: ${{ parameters.serviceConnectionName }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                csmFile: $(infraTemplate)
+                csmParametersFile: $(parameterFile)
+                deploymentName: $(Build.BuildId)
+                overrideParameters: '-buildId $(Build.BuildId)'
+                location: ${{ parameters.deploymentRegion }}
+                deploymentOutputs: infraOutputs
+            
+            - task: PowerShell@2
+              displayName: Set Variables from Deployment Output
+              inputs:
+                filePath: $(variableScriptFile)
+                arguments: -armOutputString '$(infraOutputs)'
+            
+            - task: AzureFunctionApp@1
+              displayName: Deploy Order Fulfillment Function App
+              inputs:
+                azureSubscription: ${{ parameters.serviceConnectionName }}
+                appType: functionAppLinux
+                appName: $(functionAppName)
+                package: $(functionPackage)

@@ -1,0 +1,31 @@
+parameters:
+- name: serviceConnectionName
+  displayName: Azure DeveOps Service Connection Name
+  type: string
+  default: 'Christopher House - Internal Demo Sub'
+
+trigger:
+  branches:
+    include:
+     - '*'
+pr: none
+
+stages:
+ - stage: Build
+   displayName: Build Infrastructure and Code
+   jobs:
+   - template: templates/build.yaml
+     parameters:
+       serviceConnectionName: ${{ parameters.serviceConnectionName }}
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: dev
+     resourceGroupName: FUNC-DEMO
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: qa
+     resourceGroupName: FUNC-DEMO-QA
