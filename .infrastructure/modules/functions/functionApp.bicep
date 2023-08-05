@@ -39,7 +39,9 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'AzureWebJobsStorage'
-          value: storage.listKeys().keys[0].value
+          // GitHub CoPilot prompt to set the value of the connection string, since I can never remember :D
+          // Set the value below to the primary connection string for the storage account referenced by the variable 'storage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
         }
       ]
     }

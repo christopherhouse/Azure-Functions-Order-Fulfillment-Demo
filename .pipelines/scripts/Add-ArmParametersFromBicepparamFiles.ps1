@@ -5,6 +5,13 @@
 # following command: bicep build-params [current file name]
 # [current file name] should be the current file name in the loop
 ########################################################################
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $armOutputString
+)
 
 $files = Get-ChildItem -Path .\*.bicepparam -Recurse
 
