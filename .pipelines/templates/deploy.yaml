@@ -59,7 +59,7 @@ stages:
               displayName: Set Variables from Deployment Output
               inputs:
                 filePath: $(variableScriptFile)
-                arguments: -armOutputString $(infraOutputs)
+                arguments: -armOutputString '$(infraOutputs)'
             
             - task: AzureFunctionApp@1
               displayName: Deploy Order Fulfillment Function App
