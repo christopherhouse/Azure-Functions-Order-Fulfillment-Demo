@@ -21,10 +21,12 @@ param buildId int = 0
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 
 var serviceBusNamespaceName = '${baseName}-sbns'
+var logAnalyticsWorkspaceName = '${baseName}-laws'
 
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
 var ordersTopicDeploymentName= '${ordersTopicName}-${buildId}'
-var fulfillmentTopicDeploymentName= '${fulfillmentTopicName}-${buildId}'
+var fulfillmentTopicDeploymentName = '${fulfillmentTopicName}-${buildId}'
+var logAnalyticsDeploymentName = '${logAnalyticsWorkspaceName}-${buildId}}'
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -71,5 +73,13 @@ module fulfillmentTopic './modules/serviceBus/serviceBusTopic.bicep' = {
     serviceBusNamespaceName: sbNs.outputs.name
     topicName: fulfillmentTopicName
     maxTopicSize: maxTopicSize
+  }
+}
+
+module laws './modules/observability/logAnalyticsWorkspace.bicep' = {
+  name: logAnalyticsDeploymentName
+  params: {
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+    location: location
   }
 }
