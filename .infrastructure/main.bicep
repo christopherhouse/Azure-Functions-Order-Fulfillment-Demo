@@ -107,6 +107,7 @@ module laws './modules/observability/logAnalyticsWorkspace.bicep' = {
   params: {
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     location: location
+    tags: tags
   }
 }
 
@@ -116,6 +117,7 @@ module funcAppInsights './modules/observability/applicationInsights.bicep' = {
     appInsightsName: functionsAppInsightsName
     location: location
     logAnalyticsWorkspaceId: laws.outputs.id
+    tags: tags
   }
 }
 
