@@ -4,6 +4,7 @@ param appServicePlanId string
 param managedIdentityResourceId string
 param storageAccountName string
 param appInsightsInstrumentationkeySecretUri string
+param cosmosDbConnectionStringSecretUri string
 param tags object
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
@@ -49,6 +50,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: '@Microsoft.KeyVault(SecretUri=${appInsightsInstrumentationkeySecretUri})'
+        }
+        {
+          name: 'COSMOS_CONNECTION_STRING'
+          value: '@Microsoft.KeyVault(SecretUri=${cosmosDbConnectionStringSecretUri})'
         }
       ]
     }

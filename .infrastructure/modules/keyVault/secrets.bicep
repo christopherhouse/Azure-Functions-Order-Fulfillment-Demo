@@ -42,5 +42,5 @@ module cosmosDbConnStringSecret './keyVaultSecret.bicep' = {
 
 output appInsightsInstrumentationkeyUri string = aiKeySecret.outputs.secretUri
 output appInsightsConnectionStringUri string = aiConnStringSecret.outputs.secretUri
-output cososDbConnectionStringUri string = cosmosDbConnStringSecret.outputs.secretUri
+output cosmosDbConnectionStringUri string = cosmosDbConnStringSecret.outputs.secretUri
 

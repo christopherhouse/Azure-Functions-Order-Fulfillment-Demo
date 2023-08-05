@@ -175,6 +175,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     managedIdentityResourceId: funcUami.outputs.id
     storageAccountName: funcStorage.outputs.name
     appInsightsInstrumentationkeySecretUri: secrets.outputs.appInsightsInstrumentationkeyUri
+    cosmosDbConnectionStringSecretUri: secrets.outputs.cosmosDbConnectionStringUri
     tags: tags
   }
 }
