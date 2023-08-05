@@ -30,6 +30,9 @@ var logAnalyticsWorkspaceName = '${baseName}-laws'
 var functionsAppInsightsName = '${baseName}-func-ai'
 var keyVaultName = '${baseName}-kv'
 var storageAccountName = length('${baseName}sa') > 24 ? toLower(substring('${baseName}sa', 0, 24)) : toLower('${baseName}sa')
+var functionAppServicePlanName = '${baseName}-func-asp'
+var functionAppName = '${baseName}-func'
+var functionAppUserAssignedIdentityName = '${functionAppName}-uami'
 
 // Deployment Names
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
@@ -39,6 +42,9 @@ var logAnalyticsDeploymentName = '${logAnalyticsWorkspaceName}-${buildId}'
 var functionsAppInsightsDeploymentName = '${functionsAppInsightsName}-${buildId}'
 var keyVaultDeploymentName = '${keyVaultName}-${buildId}'
 var storageAccountDeploymentName = '${storageAccountName}-${buildId}'
+var functionAppServicePlanDeploymentName = '${functionAppServicePlanName}-${buildId}'
+var functionAppDeploymentName = '${functionAppName}-${buildId}'
+var functionAppUserAssignedIdentityDeploymentName = '${functionAppUserAssignedIdentityName}-${buildId}'
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -120,5 +126,32 @@ module funcStorage './modules/storageAccount.bicep' = {
   params: {
     storageAccountName: storageAccountName
     location: location
+  }
+}
+
+module funcUami './modules/userAssignedManagedIdentity.bicep' = {
+  name: functionAppUserAssignedIdentityDeploymentName
+  params: {
+    managedIdentityName: functionAppUserAssignedIdentityName
+    location: location
+  }
+}
+
+module funcAsp './modules/functions/appServicePlan.bicep' = {
+  name: functionAppServicePlanDeploymentName
+  params: {
+    appServicePlanName: functionAppServicePlanName
+    location: location
+  }
+}
+
+module funcApp './modules/functions/functionApp.bicep' = {
+  name: functionAppDeploymentName
+  params: {
+    location: location
+    appServicePlanId: funcAsp.outputs.name
+    functionAppName: functionAppName
+    managedIdentityResourceId: funcUami.outputs.id
+    storageAccountName: funcStorage.outputs.name
   }
 }
