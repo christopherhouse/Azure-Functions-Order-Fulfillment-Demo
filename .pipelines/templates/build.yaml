@@ -23,7 +23,7 @@ jobs:
 
     - script: |
         dotnet restore
-        dotnet build --configuration Release --runtime linux-x64 --self-contained false
+        dotnet build --configuration Release
       displayName: Build Function App
     
     - task: DotNetCoreCLI@2
@@ -32,7 +32,7 @@ jobs:
         command: publish
         publishWebProjects: false
         projects: '**/*.csproj'
-        arguments: '--configuration Release --output $(functionPublishPath) --runtime linux-x64 --self-contained false'
+        arguments: '--configuration Release --output $(functionPublishPath)'
         modifyOutputPath: false
         zipAfterPublish: true
         workingDirectory: './'
