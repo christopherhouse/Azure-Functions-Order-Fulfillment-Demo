@@ -22,11 +22,13 @@ var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 
 var serviceBusNamespaceName = '${baseName}-sbns'
 var logAnalyticsWorkspaceName = '${baseName}-laws'
+var functionsAppInsightsName = '${baseName}-func-ai'
 
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
 var ordersTopicDeploymentName= '${ordersTopicName}-${buildId}'
 var fulfillmentTopicDeploymentName = '${fulfillmentTopicName}-${buildId}'
-var logAnalyticsDeploymentName = '${logAnalyticsWorkspaceName}-${buildId}}'
+var logAnalyticsDeploymentName = '${logAnalyticsWorkspaceName}-${buildId}'
+var functionsAppInsightsDeploymentName = '${functionsAppInsightsName}-${buildId}'
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -81,5 +83,14 @@ module laws './modules/observability/logAnalyticsWorkspace.bicep' = {
   params: {
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     location: location
+  }
+}
+
+module funcAppInsights './modules/observability/applicationInsights.bicep' = {
+  name: functionsAppInsightsDeploymentName
+  params: {
+    appInsightsName: functionsAppInsightsName
+    location: location
+    logAnalyticsWorkspaceId: laws.outputs.id
   }
 }
