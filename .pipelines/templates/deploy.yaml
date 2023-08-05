@@ -1,0 +1,39 @@
+parameters:
+- name: serviceConnectionName
+  type: string
+- name: environmentName
+  type: string
+- name: resourceGroupName
+  type: string
+
+stages:
+  - stage: Deploy_to__${{ parameters.environmentName }}
+    displayName: Deploy to ${{ parameters.environmentName }}
+    jobs:
+    - deployment: ${{ parameters.environmentName }}_Deployment
+      displayName: ${{ parameters.environmentName }} Deployment
+      pool:
+        vmImage: ubuntu-latest
+      environment: ${{ parameters.environmentName }}
+      variables:
+        infraTemplate: $(Pipeline.Workspace)/Infrastructure/main.bicep
+        parameterFile: $(Pipeline.Workspace)/Infrastructure/parameters/main.${{ parameters.environmentName }}.bicepparam
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: DownloadPipelineArtifact@2
+              displayName: Download Infrastructure Artifact
+              inputs:
+                artifact: 'Infrastructure'
+            
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: Deploy Infrastructure to ${{ parameters.environmentName }}
+              inputs:
+                deploymentScope: Resource Group
+                azureResourceManagerConnection: ${{ parameters.serviceConnectionName }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                csmFile: $(infraTemplate)
+                csmParametersFile: $(parameterFile)
+                deploymentName: $$(Build.BuildId)
+                overrideParameters: '-buildId $$(Build.BuildId)'

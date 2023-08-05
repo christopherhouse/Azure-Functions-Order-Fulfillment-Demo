@@ -20,3 +20,9 @@ stages:
    - template: templates/build.yaml
      parameters:
        serviceConnectionName: ${{ parameters.serviceConnectionName }}
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: dev
+     resourceGroupName: FUNC-DEMO
