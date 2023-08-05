@@ -3,7 +3,7 @@ param location string
 param appServicePlanId string
 param managedIdentityResourceId string
 param storageAccountName string
-param appInsightsConnectionStringSecretUri string
+param appInsightsInstrumentationkeySecretUri string
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -45,8 +45,8 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
         }
         {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: '@Microsoft.KeyVault(SecretUri=${appInsightsConnectionStringSecretUri})'
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: '@Microsoft.KeyVault(SecretUri=${appInsightsInstrumentationkeySecretUri})'
         }
       ]
     }
