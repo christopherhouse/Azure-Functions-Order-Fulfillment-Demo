@@ -10,9 +10,6 @@ trigger:
      - '*'
 pr: none
 
-pool:
-  vmImage: ubuntu-latest
-
 stages:
  - stage: Build
    displayName: Build Infrastructure and Code

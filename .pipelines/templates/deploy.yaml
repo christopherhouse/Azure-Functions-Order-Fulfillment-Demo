@@ -5,6 +5,9 @@ parameters:
   type: string
 - name: resourceGroupName
   type: string
+- name: deploymentRegion
+  type: string
+  default: 'eastus'
 
 stages:
   - stage: Deploy_to__${{ parameters.environmentName }}
@@ -37,3 +40,4 @@ stages:
                 csmParametersFile: $(parameterFile)
                 deploymentName: $$(Build.BuildId)
                 overrideParameters: '-buildId $$(Build.BuildId)'
+                location: ${{ parameters.deploymentRegion }}
