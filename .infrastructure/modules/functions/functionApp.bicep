@@ -24,6 +24,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
   }
   tags: tags
   properties: {
+    keyVaultReferenceIdentity: managedIdentityResourceId
     serverFarmId: appServicePlanId
     httpsOnly: true
     siteConfig: {
