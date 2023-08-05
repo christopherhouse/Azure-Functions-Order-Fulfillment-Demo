@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workloadPrefix": {
+      "value": "cmh"
+    },
+    "workloadName": {
+      "value": "ordering"
+    },
+    "environmentName": {
+      "value": "dev"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "serviceBusSku": {
+      "value": "Standard"
+    },
+    "maxTopicSize": {
+      "value": 2048
+    },
+    "ordersTopicName": {
+      "value": "received-orders"
+    },
+    "ordersTopicSubscriptionName": {
+      "value": "auto-approved-orders"
+    },
+    "ordersForApprovalSubscriptionName": {
+      "value": "orders-requiring-approval"
+    },
+    "ordersTopicSqlFilter": {
+      "value": "user.orderTotal <= 1000"
+    },
+    "ordersForApprovalSqlFilter": {
+      "value": "user.orderTotal >= 1000"
+    },
+    "fulfillmentTopicName": {
+      "value": "orders-for-fulfillment"
+    }
+  }
+}

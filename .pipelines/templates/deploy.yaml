@@ -20,7 +20,7 @@ stages:
       environment: ${{ parameters.environmentName }}
       variables:
         infraTemplate: $(Pipeline.Workspace)/Infrastructure/main.bicep
-        parameterFile: $(Pipeline.Workspace)/Infrastructure/parameters/main.${{ parameters.environmentName }}.bicepparam
+        parameterFile: $(Pipeline.Workspace)/Infrastructure/parameters/main.${{ parameters.environmentName }}.json
       strategy:
         runOnce:
           deploy:
