@@ -46,7 +46,7 @@ jobs:
     - task: PublishPipelineArtifact@1
       displayName: Publish Function App Artifact
       inputs:
-        artifactName: functionspp
+        artifactName: functionapp
         targetPath: $(functionPublishPath)
     
     - task: PublishPipelineArtifact@1
