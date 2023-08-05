@@ -1,3 +1,4 @@
+param deploymentDate string = utcNow()
 param workloadPrefix string
 param workloadName string
 param environmentName string
@@ -45,12 +46,20 @@ var functionAppDeploymentName = '${functionAppName}-${buildId}'
 var functionAppUserAssignedIdentityDeploymentName = '${functionAppUserAssignedIdentityName}-${buildId}'
 var secretsDeploymentName = 'secrets-${buildId}'
 
+var tags = {
+  BuildId: buildId
+  Environment: environmentName
+  Workload: workloadName
+  LastDeploymentDate: deploymentDate
+}
+
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
   params: {
     serviceBusNamespaceName: serviceBusNamespaceName
     location: location
     serviceBusSku: serviceBusSku
+    tags: tags
   }
 }
 
