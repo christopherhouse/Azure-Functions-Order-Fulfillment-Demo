@@ -15,20 +15,28 @@ param ordersForApprovalSubscriptionName string
 param ordersTopicSqlFilter string
 param ordersForApprovalSqlFilter string
 param fulfillmentTopicName string
+param keyVaultAdminIdentities array = []
 
 param buildId int = 0
 
+// Temp variables (will not need when complete)
+var keyVaultApplicationIdentities = []
+
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 
+// Resource Names
 var serviceBusNamespaceName = '${baseName}-sbns'
 var logAnalyticsWorkspaceName = '${baseName}-laws'
 var functionsAppInsightsName = '${baseName}-func-ai'
+var keyVaultName = '${baseName}-kv'
 
+// Deployment Names
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
 var ordersTopicDeploymentName= '${ordersTopicName}-${buildId}'
 var fulfillmentTopicDeploymentName = '${fulfillmentTopicName}-${buildId}'
 var logAnalyticsDeploymentName = '${logAnalyticsWorkspaceName}-${buildId}'
 var functionsAppInsightsDeploymentName = '${functionsAppInsightsName}-${buildId}'
+var keyVaultDeploymentName = '${keyVaultName}-${buildId}'
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -92,5 +100,15 @@ module funcAppInsights './modules/observability/applicationInsights.bicep' = {
     appInsightsName: functionsAppInsightsName
     location: location
     logAnalyticsWorkspaceId: laws.outputs.id
+  }
+}
+
+module kv './modules/keyVault.bicep' = {
+  name: keyVaultDeploymentName
+  params: {
+    keyVaultName: keyVaultName
+    location: location
+    adminIdentities: keyVaultAdminIdentities
+    applicationIdentities: keyVaultApplicationIdentities
   }
 }
