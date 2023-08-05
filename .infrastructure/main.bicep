@@ -128,6 +128,7 @@ module kv './modules/keyVault/keyVault.bicep' = {
     location: location
     adminIdentities: keyVaultAdminIdentities
     applicationIdentities: [ funcUami.outputs.principalId ]
+    tags: tags
   }
 }
 
@@ -136,6 +137,7 @@ module funcStorage './modules/storageAccount.bicep' = {
   params: {
     storageAccountName: storageAccountName
     location: location
+    tags: tags
   }
 }
 
@@ -144,6 +146,7 @@ module funcUami './modules/userAssignedManagedIdentity.bicep' = {
   params: {
     managedIdentityName: functionAppUserAssignedIdentityName
     location: location
+    tags: tags
   }
 }
 
@@ -152,6 +155,7 @@ module funcAsp './modules/functions/appServicePlan.bicep' = {
   params: {
     appServicePlanName: functionAppServicePlanName
     location: location
+    tags: tags
   }
 }
 
@@ -164,6 +168,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     managedIdentityResourceId: funcUami.outputs.id
     storageAccountName: funcStorage.outputs.name
     appInsightsInstrumentationkeySecretUri: secrets.outputs.appInsightsInstrumentationkeyUri
+    tags: tags
   }
 }
 

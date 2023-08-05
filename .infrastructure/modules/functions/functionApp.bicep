@@ -4,6 +4,7 @@ param appServicePlanId string
 param managedIdentityResourceId string
 param storageAccountName string
 param appInsightsInstrumentationkeySecretUri string
+param tags object
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -20,6 +21,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
       '${managedIdentityResourceId}': {}
     }
   }
+  tags: tags
   properties: {
     serverFarmId: appServicePlanId
     httpsOnly: true

@@ -2,7 +2,7 @@ param keyVaultName string
 param location string
 param adminIdentities array
 param applicationIdentities array
-
+param tags object
 
 var adminPolicies = [for id in adminIdentities: {
   tenantId: subscription().tenantId
@@ -29,6 +29,7 @@ var policies = union(adminPolicies, appPolicies)
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: keyVaultName
   location: location
+  tags: tags
   properties: {
     sku: {
       name: 'standard'
