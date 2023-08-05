@@ -10,7 +10,7 @@ jobs:
   - task: AzureCLI@2
     displayName: Build Bicep template
     inputs:
-      azureSubscription: $(serviceConnectionName)
+      azureSubscription: ${{ parameters.serviceConnectionName }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
