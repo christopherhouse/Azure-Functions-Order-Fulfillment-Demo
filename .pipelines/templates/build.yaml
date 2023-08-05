@@ -8,12 +8,13 @@ jobs:
   displayName: Build Bicep and Function App
   variables:
     functionPublishPath: '$(build.artifactstagingdirectory)/functionapp'
+    armParametersScriptPath: $(System.DefaultWorkingDirectory)/.pipelines/scripts/Add-ArmParametersFromBicepparamFiles.ps1
   steps:
     - task: PowerShell@2
       displayName: Generate ARM parameters from *.bicepparam
       inputs:
         workingDirectory: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/
-        filePath: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/update-arm-params.ps1
+        filePath: $(armParametersScriptPath)
 
     - task: UseDotNet@2
       displayName: Setup .NET Core SDK
