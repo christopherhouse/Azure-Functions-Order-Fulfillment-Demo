@@ -43,6 +43,7 @@ var storageAccountDeploymentName = '${storageAccountName}-${buildId}'
 var functionAppServicePlanDeploymentName = '${functionAppServicePlanName}-${buildId}'
 var functionAppDeploymentName = '${functionAppName}-${buildId}'
 var functionAppUserAssignedIdentityDeploymentName = '${functionAppUserAssignedIdentityName}-${buildId}'
+var secretsDeploymentName = 'secrets-${buildId}'
 
 module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
   name: serviceBusDeploymentName
@@ -109,7 +110,7 @@ module funcAppInsights './modules/observability/applicationInsights.bicep' = {
   }
 }
 
-module kv './modules/keyVault.bicep' = {
+module kv './modules/keyVault/keyVault.bicep' = {
   name: keyVaultDeploymentName
   params: {
     keyVaultName: keyVaultName
@@ -151,6 +152,15 @@ module funcApp './modules/functions/functionApp.bicep' = {
     functionAppName: functionAppName
     managedIdentityResourceId: funcUami.outputs.id
     storageAccountName: funcStorage.outputs.name
+  }
+}
+
+module secrets './modules/keyVault/secrets.bicep' = {
+  name: secretsDeploymentName
+  params: {
+    appInsightsName: funcAppInsights.outputs.name
+    buildId: buildId
+    keyVaultName: kv.outputs.name
   }
 }
 
