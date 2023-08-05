@@ -5,7 +5,7 @@ resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   name: logAnalyticsWorkspaceName
   location: location
   properties: {
-    retentionInDays: 15
+    retentionInDays: 30
     sku: {
       name: 'PerGB2018'
     }
