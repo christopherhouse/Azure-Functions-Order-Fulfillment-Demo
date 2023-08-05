@@ -1,0 +1,23 @@
+parameters:
+- name: serviceConnectionName
+  type: string
+jobs:
+- job: Build
+  pool:
+    vmImage: ubuntu-latest
+  displayName: Build Bicep and Function App
+  steps:
+  - task: AzureCLI@2
+    displayName: Build Bicep template
+    inputs:
+      azureSubscription: $(serviceConnectionName)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az bicep build --file $(System.DefaultWorkingDirectory)/.infrastructure/main.bicep
+  
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Infrastructure Artifacts
+    inputs:
+      artifactName: Infrastructure
+      targetPath: $(System.DefaultWorkingDirectory)/.infrastructure/
