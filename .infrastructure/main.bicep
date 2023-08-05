@@ -118,7 +118,7 @@ module kv './modules/keyVault.bicep' = {
     keyVaultName: keyVaultName
     location: location
     adminIdentities: keyVaultAdminIdentities
-    applicationIdentities: keyVaultApplicationIdentities
+    applicationIdentities: [ funcUami.outputs.id ]
   }
 }
 
