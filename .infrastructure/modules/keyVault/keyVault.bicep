@@ -38,7 +38,7 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
     tenantId: subscription().tenantId
     accessPolicies: policies
     softDeleteRetentionInDays: 7
-    enablePurgeProtection: true
+    enablePurgeProtection: false
     enableRbacAuthorization: false
     networkAcls: {
       bypass: 'AzureServices'

@@ -1,7 +1,7 @@
 using '../main.bicep'
 
 param workloadPrefix = 'cmh'
-param workloadName = 'ordering'
+param workloadName = 'orders'
 param environmentName = 'qa'
 param location = 'eastus'
 param serviceBusSku = 'Standard'
