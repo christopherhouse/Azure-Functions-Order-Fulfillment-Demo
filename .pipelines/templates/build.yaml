@@ -13,15 +13,6 @@ jobs:
         workingDirectory: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/
         filePath: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/update-arm-params.ps1
 
-  # - task: AzureCLI@2
-  #   displayName: Build Bicep template
-  #   inputs:
-  #     azureSubscription: ${{ parameters.serviceConnectionName }}
-  #     scriptType: bash
-  #     scriptLocation: inlineScript
-  #     inlineScript: |
-  #       az bicep build --file $(System.DefaultWorkingDirectory)/.infrastructure/main.bicep
-  
     - task: PublishPipelineArtifact@1
       displayName: Publish Infrastructure Artifacts
       inputs:
