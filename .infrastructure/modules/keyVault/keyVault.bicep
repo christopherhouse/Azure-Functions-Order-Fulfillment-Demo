@@ -18,7 +18,9 @@ var appPolicies = [for id in applicationIdentities: {
   tenantId: subscription().tenantId
   objectId: id
   permissions: {
-    secrets: ['Get']
+    secrets: ['Get'
+      'List'
+  ]
   }
 }]
 
