@@ -39,5 +39,5 @@ stages:
                 csmFile: $(infraTemplate)
                 csmParametersFile: $(parameterFile)
                 deploymentName: $(Build.BuildId)
-                overrideParameters: '-buildId $$(Build.BuildId)'
+                overrideParameters: '-buildId $(Build.BuildId)'
                 location: ${{ parameters.deploymentRegion }}
