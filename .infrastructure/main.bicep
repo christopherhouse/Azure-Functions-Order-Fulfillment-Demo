@@ -17,6 +17,9 @@ param ordersTopicSqlFilter string
 param ordersForApprovalSqlFilter string
 param fulfillmentTopicName string
 param keyVaultAdminIdentities array = []
+param cosmosDbDatabaseName string
+param ordersCosmosContainerName string
+param orderContainerPartitionKey string
 
 param buildId int = 0
 
@@ -32,6 +35,7 @@ var storageAccountName = length('${baseNameNoDashes}sa') > 24 ? toLower(substrin
 var functionAppServicePlanName = '${baseName}-func-asp'
 var functionAppName = '${baseName}-func'
 var functionAppUserAssignedIdentityName = '${functionAppName}-uami'
+var cosmosDbAccountName = '${baseName}-cdb-acct'
 
 // Deployment Names
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
@@ -45,6 +49,9 @@ var functionAppServicePlanDeploymentName = '${functionAppServicePlanName}-${buil
 var functionAppDeploymentName = '${functionAppName}-${buildId}'
 var functionAppUserAssignedIdentityDeploymentName = '${functionAppUserAssignedIdentityName}-${buildId}'
 var secretsDeploymentName = 'secrets-${buildId}'
+var cosmosDbAccountDeploymentName = '${cosmosDbAccountName}-${buildId}'
+var cosmosDbDatabaseDeploymentName = '${cosmosDbDatabaseName}-${buildId}'
+var orderContainerDeploymentName = '${ordersCosmosContainerName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -178,6 +185,32 @@ module secrets './modules/keyVault/secrets.bicep' = {
     appInsightsName: funcAppInsights.outputs.name
     buildId: buildId
     keyVaultName: kv.outputs.name
+  }
+}
+
+module cosmosAccount './modules/cosmos/cosmosAccount.bicep' = {
+  name: cosmosDbAccountDeploymentName
+  params: {
+    location: location
+    cosmosAccountName: cosmosDbAccountName
+  }
+}
+
+module cosmosDb './modules/cosmos//cosmosDbDatabase.bicep' = {
+  name: cosmosDbDatabaseDeploymentName
+  params: {
+    cosmosAccountName: cosmosAccount.outputs.name
+    databaseName: cosmosDbDatabaseName
+  }
+}
+
+module ordersContainer './modules/cosmos/cosmosContainer.bicep' = {
+  name: orderContainerDeploymentName
+  params: {
+    containerName: ordersCosmosContainerName
+    cosmosAccountName: cosmosAccount.outputs.name
+    databaseName: cosmosDb.outputs.name
+    partitionKey: orderContainerPartitionKey
   }
 }
 
