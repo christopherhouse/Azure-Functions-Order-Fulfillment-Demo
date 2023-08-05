@@ -152,6 +152,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     functionAppName: functionAppName
     managedIdentityResourceId: funcUami.outputs.id
     storageAccountName: funcStorage.outputs.name
+    appInsightsConnectionStringSecretUri: secrets.outputs.appInsightsConnectionStringUri
   }
 }
 

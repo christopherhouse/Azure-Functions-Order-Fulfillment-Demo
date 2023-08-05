@@ -3,6 +3,7 @@ param location string
 param appServicePlanId string
 param managedIdentityResourceId string
 param storageAccountName string
+param appInsightsConnectionStringSecretUri string
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -42,6 +43,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           // GitHub CoPilot prompt to set the value of the connection string, since I can never remember :D
           // Set the value below to the primary connection string for the storage account referenced by the variable 'storage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: '@Microsoft.KeyVault(SecretUri=${appInsightsConnectionStringSecretUri})'
         }
       ]
     }
