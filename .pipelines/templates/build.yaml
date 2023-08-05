@@ -11,7 +11,7 @@ jobs:
       displayName: Generate ARM parameters from *.bicepparam
       inputs:
         workingDirectory: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/
-        filePath: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/update-arm-parameters.ps1
+        filePath: $(System.DefaultWorkingDirectory)/.infrastructure/parameters/update-arm-params.ps1
 
   # - task: AzureCLI@2
   #   displayName: Build Bicep template
