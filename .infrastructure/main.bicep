@@ -185,6 +185,7 @@ module secrets './modules/keyVault/secrets.bicep' = {
     appInsightsName: funcAppInsights.outputs.name
     buildId: buildId
     keyVaultName: kv.outputs.name
+    cosmosDbAccountName: cosmosAccount.outputs.name
   }
 }
 
