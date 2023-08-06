@@ -198,6 +198,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     ordersContainerName: ordersCosmosContainerName
     fulfillmentTopic: fulfillmentTopic.outputs.name
     approvedOrdersSubscription: fulfillmentTopicSubscriptionName
+    maxWorkDelayInMilliseconds: maxWorkDelayInMilliseconds
     tags: tags
   }
 }

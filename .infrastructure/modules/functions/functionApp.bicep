@@ -14,7 +14,7 @@ param fulfillmentTopic string
 param approvedOrdersSubscription string
 param maxWorkDelayInMilliseconds int
 
-resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
   name: storageAccountName
   scope: resourceGroup()
 }
