@@ -23,9 +23,7 @@ stages:
         parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
         variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.ps1
         functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
-        setFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/Set-FunctionKeySecret.ps1
-        getFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/getfunctionkey.sh
-      strategy:
+        setFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/setfunctionkey.sh
         runOnce:
           deploy:
             steps:
@@ -75,16 +73,7 @@ stages:
               displayName: Set Function App Key
               inputs:
                 azureSubscription: ${{ parameters.serviceConnectionName }}
-                scriptPath: $(getFunctionSecretScriptFile)
+                scriptPath: $(setFunctionSecretScriptFile)
                 scriptType: bash
                 scriptLocation: scriptPath
                 arguments: ${{ parameters.resourceGroupName }} $(functionAppName) $(keyVaultName)
-
-            # - task: AzureCLI@2
-            #   displayName: Set Function Key Secret in Key Vault
-            #   inputs:
-            #     azureSubscription: ${{ parameters.serviceConnectionName }}
-            #     scriptType: pscore
-            #     scriptLocation: scriptPath
-            #     scriptPath:  $(setFunctionSecretScriptFile)
-            #     arguments:  -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName) -keyVaultSecretValue $(functionKey)
