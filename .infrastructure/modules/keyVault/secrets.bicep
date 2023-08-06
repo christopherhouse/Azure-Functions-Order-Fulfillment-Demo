@@ -1,7 +1,11 @@
 param keyVaultName string
 param appInsightsName string
 param cosmosDbAccountName string
+param serviceBusNamespaceId string
 param buildId int
+
+var serviceBus = '${serviceBusNamespaceId}/AuthorizationRules/RootManageSharedAccessKey'
+var serviceBusConnectionString = listKeys(serviceBus, '2021-06-01').primaryConnectionString
 
 resource ai 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
@@ -40,7 +44,16 @@ module cosmosDbConnStringSecret './keyVaultSecret.bicep' = {
   }
 }
 
+module sbConnStringSecret './keyVaultSecret.bicep' = {
+  name: 'sbConnStringSecret-${buildId}'
+  params: {
+    keyVaultName: keyVaultName
+    secretName: 'ServiceBusConnectionString'
+    secretValue: serviceBusConnectionString
+  }
+}
+
 output appInsightsInstrumentationkeyUri string = aiKeySecret.outputs.secretUri
 output appInsightsConnectionStringUri string = aiConnStringSecret.outputs.secretUri
 output cosmosDbConnectionStringUri string = cosmosDbConnStringSecret.outputs.secretUri
-
+output serviceBusConnectionStringUri string = sbConnStringSecret.outputs.secretUri

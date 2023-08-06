@@ -189,6 +189,8 @@ module funcApp './modules/functions/functionApp.bicep' = {
     storageAccountName: funcStorage.outputs.name
     appInsightsInstrumentationkeySecretUri: secrets.outputs.appInsightsInstrumentationkeyUri
     cosmosDbConnectionStringSecretUri: secrets.outputs.cosmosDbConnectionStringUri
+    serviceBusConnectionStringSecretUri: secrets.outputs.serviceBusConnectionStringUri
+    ordersTopicName: ordersTopicName
     tags: tags
   }
 }
@@ -200,6 +202,7 @@ module secrets './modules/keyVault/secrets.bicep' = {
     buildId: buildId
     keyVaultName: kv.outputs.name
     cosmosDbAccountName: cosmosAccount.outputs.name
+    serviceBusNamespaceId: sbNs.outputs.id
   }
 }
 
