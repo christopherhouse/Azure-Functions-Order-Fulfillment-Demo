@@ -46,6 +46,7 @@ var functionAppServicePlanName = '${baseName}-func-asp'
 var functionAppName = '${baseName}-func'
 var functionAppUserAssignedIdentityName = '${functionAppName}-uami'
 var cosmosDbAccountName = '${baseName}-cdb-acct'
+var loadTestingName = '${baseName}-alt'
 
 // Deployment Names
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
@@ -66,6 +67,7 @@ var shipmentTopicDeploymentName = '${shipmentTopicName}-${buildId}'
 var leasesContainerDeploymentName = '${cosmosLeaseContainerName}-${buildId}'
 var statusNotificationTopicDeploymentName = '${statusNotificationTopicName}-${buildId}'
 var statusNotificationTopicSubscriptionDeploymentName = '${statusNotificationTopicSubscriptionName}-${buildId}'
+var loadTestingDeploymentName = '${loadTestingName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -299,6 +301,14 @@ module statusSub './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
     serviceBusNamespaceName: sbNs.outputs.name
     subscriptionName: statusNotificationTopicSubscriptionName
     topicName: statusTopic.outputs.name
+  }
+}
+
+module alt './modules/azureLoadTesting.bicep' = {
+  name: loadTestingDeploymentName
+  params: {
+    loadTestsName: loadTestingName
+    location: location
   }
 }
 

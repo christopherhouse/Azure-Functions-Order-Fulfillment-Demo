@@ -7,8 +7,24 @@
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="ORDER_SUBMIT_URI" elementType="Argument">
-            <stringProp name="Argument.name">ORDER_SUBMIT_URI</stringProp>
+          <elementProp name="ORDER_SUBMIT_HOST" elementType="Argument">
+            <stringProp name="Argument.name">ORDER_SUBMIT_HOST</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">cmh-orderfuncs-dev-func.azurewebsites.net</stringProp>
+          </elementProp>
+          <elementProp name="ORDER_SUBMIT_PATH" elementType="Argument">
+            <stringProp name="Argument.name">ORDER_SUBMIT_PATH</stringProp>
+            <stringProp name="Argument.value">/api/CreateSalesOrder?code=9xXK0o9RMYY94J4Tq-GuxOEjqFNRLuTK0CNYvrYSiSw8AzFuk2epFg==</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ORDER_SUBMIT_PROTOCOL" elementType="Argument">
+            <stringProp name="Argument.name">ORDER_SUBMIT_PROTOCOL</stringProp>
+            <stringProp name="Argument.value">Https</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ORDER_SUBMIT_PORT" elementType="Argument">
+            <stringProp name="Argument.name">ORDER_SUBMIT_PORT</stringProp>
+            <stringProp name="Argument.value">443</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -52,9 +68,10 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">7102</stringProp>
-          <stringProp name="HTTPSampler.path">/api/CreateSalesOrder</stringProp>
+          <stringProp name="HTTPSampler.domain">${ORDER_SUBMIT_HOST}</stringProp>
+          <stringProp name="HTTPSampler.port">${ORDER_SUBMIT_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${ORDER_SUBMIT_PORT}</stringProp>
+          <stringProp name="HTTPSampler.path">${ORDER_SUBMIT_PATH}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -67,6 +84,15 @@
           <boolProp name="HTTPSampler.md5">false</boolProp>
           <intProp name="HTTPSampler.ipSourceType">0</intProp>
         </HTTPSamplerProxy>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
         <hashTree/>
       </hashTree>
     </hashTree>
