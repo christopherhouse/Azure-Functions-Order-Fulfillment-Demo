@@ -1,4 +1,4 @@
 #!/bin/bash
-KEY=$($key = az functionapp keys list --resource-group $0 --name $1 --query "functionKeys.default" -o tsv)
+KEY=$(az functionapp keys list --resource-group $1 --name $2 --query "functionKeys.default" -o tsv)
 
-az keyvault secret set --vault-name $2 --name "FunctionAppKey" --value $KEY
+az keyvault secret set --vault-name $3 --name "FunctionAppKey" --value $KEY
