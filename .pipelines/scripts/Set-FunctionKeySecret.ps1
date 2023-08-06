@@ -3,21 +3,18 @@ param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $functionAppName,
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
     $resourceGroupName,
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $keyVaultName
+    $keyVaultName,
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $keyVaultSecretValue
 )
 
-Write-Host "Getting deafult key for Function App $functionAppName"
-$key = az functionapp keys list --resource-group $resourceGroupName --name $functionAppName --query "functionKeys.default" -o tsv
-
 Write-Host "Setting secret value in Key Vault $keyVaultName"
-Set-AzKeyVaultSecret -VaultName $keyVaultName -Name "functionAppKey" -SecretValue $key
+Set-AzKeyVaultSecret -VaultName $keyVaultName -Name "functionAppKey" -SecretValue $keyVaultSecretValue
 
 Write-Host "Done!"
