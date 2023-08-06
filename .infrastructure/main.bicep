@@ -27,6 +27,7 @@ param maxWorkDelayInMilliseconds int = 100
 
 param buildId int = 0
 
+var maxContainerRUs = 1000
 var defaultTopicSqlFilter = '1=1'
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 var baseNameNoDashes = replace(baseName, '-', '')
@@ -237,6 +238,7 @@ module ordersContainer './modules/cosmos/cosmosContainer.bicep' = {
     cosmosAccountName: cosmosAccount.outputs.name
     databaseName: cosmosDb.outputs.name
     partitionKey: orderContainerPartitionKey
+    maxRUs: maxContainerRUs
   }
 }
 

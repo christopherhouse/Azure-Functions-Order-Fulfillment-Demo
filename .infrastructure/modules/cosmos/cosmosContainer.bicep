@@ -2,6 +2,7 @@ param containerName string
 param databaseName string
 param cosmosAccountName string
 param partitionKey string
+param maxRUs int
 
 resource acct 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' existing = {
   name: cosmosAccountName
@@ -17,6 +18,11 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
   name: containerName
   parent: db
   properties: {
+    options: {
+      autoscaleSettings: {
+        maxThroughput: maxRUs
+      }
+    }
     resource: {
       id: containerName
       partitionKey: {

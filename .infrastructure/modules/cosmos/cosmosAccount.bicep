@@ -16,11 +16,6 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
         isZoneRedundant: false
       }
     ]
-    capabilities: [
-      {
-        name: 'EnableServerless'
-      }
-    ]
     databaseAccountOfferType: 'Standard'
   }
 }
