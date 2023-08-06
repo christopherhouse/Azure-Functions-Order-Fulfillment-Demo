@@ -107,6 +107,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           name: 'webHookNotificationUrl'
           value: webHookNotificationUrl
         }
+        {
+          name: 'eventUriFormatString'
+          value: 'https://{functionAppName}.azurewebsites.net/runtime/webhooks/durabletask/instances/{instanceId}/CreditApproved&code={1}'
+        }
       ]
     }
   }

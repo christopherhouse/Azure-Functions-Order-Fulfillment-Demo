@@ -25,11 +25,17 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         public async Task Run([ServiceBusTrigger(topicName: Settings.StatusNotificationTopic,
             subscriptionName: Settings.AllStatusNotificationSubscription,
             Connection = Connections.ServiceBusConnectionString)]string statusNotification)
-        {                                
-            var content = new StringContent(statusNotification);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await _httpClient.PostAsync(_webhookUri, content);
-            response.EnsureSuccessStatusCode();
+        {
+            try
+            {
+                var content = new StringContent(statusNotification);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var response = await _httpClient.PostAsync(_webhookUri, content);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending status notification");
+            }
         }
     }
 }

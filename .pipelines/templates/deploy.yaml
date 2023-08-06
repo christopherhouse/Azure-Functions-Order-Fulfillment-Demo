@@ -23,6 +23,7 @@ stages:
         parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
         variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.ps1
         functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
+        secretScriptFile: $(Pipeline.Workspace)/scripts/Set-FunctionKeySecret.ps1
       strategy:
         runOnce:
           deploy:
@@ -68,3 +69,10 @@ stages:
                 appType: functionAppLinux
                 appName: $(functionAppName)
                 package: $(functionPackage)
+
+            - task: PowerShell@2
+              displayName: Set Function Key Secret in Key Vault
+              inputs:
+                filePath: $(secretScriptFile)
+                arguments: -functionAppName $(functionAppName) -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName)
+

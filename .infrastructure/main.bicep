@@ -33,6 +33,7 @@ param allCreditApprovalsSubscription string
 
 param buildId int = 0
 
+var functionAppKeyName = 'app-key'
 var maxContainerRUs = 1000
 var defaultTopicSqlFilter = '1=1'
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
@@ -72,6 +73,7 @@ var statusNotificationTopicSubscriptionDeploymentName = '${statusNotificationTop
 var loadTestingDeploymentName = '${loadTestingName}-${buildId}'
 var sendApprovalTopicDeploymentName = '${sendApprovalTopicName}-${buildId}'
 var allCreditApprovalsSubscriptionDeploymentName = '${allCreditApprovalsSubscription}-${buildId}'
+var functionKeyDeploymentName = '${functionAppKeyName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -337,3 +339,4 @@ module sendApprovalAllMessages './modules/serviceBus/serviceBusTopicSubscription
 }
 
 output functionAppName string = funcApp.outputs.name
+output keyVaultName string = kv.outputs.name

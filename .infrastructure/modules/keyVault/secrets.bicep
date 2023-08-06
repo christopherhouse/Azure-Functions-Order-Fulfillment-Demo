@@ -53,6 +53,17 @@ module sbConnStringSecret './keyVaultSecret.bicep' = {
   }
 }
 
+// This is a hack to work around the dependency cycle between KV and the function app
+// The actual secret value will be set in the pipeline via a script
+module functionKeySecret './keyVaultSecret.bicep' = {
+  name: 'functionKeySecret-${buildId}'
+  params:{
+    keyVaultName: keyVaultName
+    secretName: 'FunctionAppKey'
+    secretValue: ''
+  }
+}
+
 output appInsightsInstrumentationkeyUri string = aiKeySecret.outputs.secretUri
 output appInsightsConnectionStringUri string = aiConnStringSecret.outputs.secretUri
 output cosmosDbConnectionStringUri string = cosmosDbConnStringSecret.outputs.secretUri
