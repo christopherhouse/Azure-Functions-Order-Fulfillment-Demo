@@ -45,14 +45,13 @@ namespace FunctionsOrderFulfillmentDemo.Functions
             
             var orderId = Guid.NewGuid().ToString();
             orderRequest.Id = orderId;
+            orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
 
-            var message = new ServiceBusMessage(requestBody)
+            var message = new ServiceBusMessage(JsonConvert.SerializeObject(orderRequest))
             {
                 CorrelationId = orderId,
                 ContentType = "application/json"
             };
-
-            orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
 
             message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
 
