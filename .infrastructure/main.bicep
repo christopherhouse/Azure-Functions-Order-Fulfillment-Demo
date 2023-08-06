@@ -75,6 +75,7 @@ module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
     serviceBusNamespaceName: serviceBusNamespaceName
     location: location
     serviceBusSku: serviceBusSku
+    logAnalyticsWorkspaceName: laws.outputs.id
     tags: tags
   }
 }
@@ -154,6 +155,7 @@ module kv './modules/keyVault/keyVault.bicep' = {
     location: location
     adminIdentities: keyVaultAdminIdentities
     applicationIdentities: [ funcUami.outputs.principalId ]
+    logAnalyticsWorkspaceName: laws.outputs.id
     tags: tags
   }
 }
@@ -203,6 +205,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     approvedOrdersSubscription: fulfillmentTopicSubscriptionName
     maxWorkDelayInMilliseconds: maxWorkDelayInMilliseconds
     cosmosLeaseContainerName: cosmosLeaseContainerName
+    logAnalyticsWorkspaceName: laws.outputs.id
     tags: tags
   }
 }
