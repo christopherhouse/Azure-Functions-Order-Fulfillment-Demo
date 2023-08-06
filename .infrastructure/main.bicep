@@ -24,7 +24,6 @@ param fulfillmentTopicSubscriptionName string
 param shipmentTopicName string
 param shipmentTopicSubscriptionName string
 
-
 param buildId int = 0
 
 var defaultTopicSqlFilter = '1=1'
