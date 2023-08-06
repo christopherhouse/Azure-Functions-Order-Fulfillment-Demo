@@ -108,8 +108,8 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
 }
 
 resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  scope: app
   name: app.name
+  scope: app
   properties: {
     workspaceId: laws.id
     logs: [
