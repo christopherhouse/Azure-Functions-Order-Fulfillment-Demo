@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace FunctionsOrderFulfillmentDemo.Models.Requests;
@@ -29,4 +30,6 @@ public class SubmitOrderRequest
     public static SubmitOrderRequest FromJson(string json) => JsonConvert.DeserializeObject<SubmitOrderRequest>(json);
 
     public string ToJsonString() => JsonConvert.SerializeObject(this);
+
+    public static SubmitOrderRequest FromByteArray(byte[] data) => FromJson(Encoding.UTF8.GetString(data));
 }

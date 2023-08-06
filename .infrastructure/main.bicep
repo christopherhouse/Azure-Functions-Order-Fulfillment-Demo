@@ -23,6 +23,7 @@ param orderContainerPartitionKey string
 param fulfillmentTopicSubscriptionName string
 param shipmentTopicName string
 param shipmentTopicSubscriptionName string
+param maxWorkDelayInMilliseconds int = 100
 
 param buildId int = 0
 

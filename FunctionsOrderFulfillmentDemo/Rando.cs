@@ -12,4 +12,11 @@ public static class Rando
 
         return rando;
     }
+
+    public static int RandomInteger(int maxValue)
+    {
+        var rando = _random.Next(1, maxValue);
+
+        return rando;
+    }
 }

@@ -19,18 +19,18 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         }
 
         [FunctionName(nameof(FulfillOrder))]
-        public async Task Run([ServiceBusTrigger("%fulfillmentTopic%", "%approvedOrdersSubscription%", Connection = Connections.ServiceBusConnectionString)]string orderJson,
-           [CosmosDB(Connection = Connections.CosmosConnectionString)] IAsyncCollector<SubmitOrderRequest> cosmosOutput,
-            [ServiceBus("%shipmentTopicName%", ServiceBusEntityType.Topic, Connection = Connections.ServiceBusConnectionString)] IAsyncCollector<ServiceBusMessage> serviceBusOutput)
+        public async Task Run([ServiceBusTrigger(Settings.FulfillmentTopicSettingName, Settings.ApprovedOrdersSubscriptionSettingName, Connection = Connections.ServiceBusConnectionString)] ServiceBusReceivedMessage orderMessage,
+           [CosmosDB(databaseName: Settings.CosmosDatabaseNameSettingName, containerName: Settings.OrdersContainerNameSettingName, Connection = Connections.CosmosConnectionString)] IAsyncCollector<SubmitOrderRequest> cosmosOutput,
+            [ServiceBus(Settings.ShipmentTopicSettingName, ServiceBusEntityType.Topic, Connection = Connections.ServiceBusConnectionString)] IAsyncCollector<ServiceBusMessage> serviceBusOutput)
         {
             // Simulate order fulfillment by putting a delay here.  Real world, there would be an ERP and multiple
             // other systems part of this workflow.
-            var delay = Rando.RandomInteger();
+            var delay = Rando.RandomInteger(Settings.MaxWorkDelayInMilliseconds);
             _logger.LogInformation($"Fulfilling order with delay of {delay}ms");
 
             await Task.Delay(delay);
- 
-            var order = SubmitOrderRequest.FromJson(orderJson);
+            
+            var order = SubmitOrderRequest.FromJson(orderMessage.Body.ToString());
             order.Status = "Processing";
 
             var message = Messaging.CreateMessage(order.ToJsonString(), order.Id, order.Total);
