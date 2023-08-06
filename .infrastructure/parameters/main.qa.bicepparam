@@ -16,3 +16,5 @@ param keyVaultAdminIdentities = ['c9be89aa-0783-4310-b73a-f81f4c3f5407']
 param cosmosDbDatabaseName = 'order-processing'
 param ordersCosmosContainerName = 'orders'
 param orderContainerPartitionKey = '/customerId'
+param fulfillmentTopicSubscriptionName = 'all-approved-orders'
+param fulfillmentTopicSqlFilter = '1=1'

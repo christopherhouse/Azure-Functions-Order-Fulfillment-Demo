@@ -20,6 +20,8 @@ param keyVaultAdminIdentities array = []
 param cosmosDbDatabaseName string
 param ordersCosmosContainerName string
 param orderContainerPartitionKey string
+param fulfillmentTopicSqlFilter string
+param fulfillmentTopicSubscriptionName string
 
 param buildId int = 0
 
@@ -52,6 +54,7 @@ var secretsDeploymentName = 'secrets-${buildId}'
 var cosmosDbAccountDeploymentName = '${cosmosDbAccountName}-${buildId}'
 var cosmosDbDatabaseDeploymentName = '${cosmosDbDatabaseName}-${buildId}'
 var orderContainerDeploymentName = '${ordersCosmosContainerName}-${buildId}'
+
 
 var tags = {
   BuildId: buildId
@@ -106,6 +109,16 @@ module fulfillmentTopic './modules/serviceBus/serviceBusTopic.bicep' = {
     serviceBusNamespaceName: sbNs.outputs.name
     topicName: fulfillmentTopicName
     maxTopicSize: maxTopicSize
+  }
+}
+
+module fulfillmentSubscription './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
+  name: '${fulfillmentTopicName}-subscription-${buildId}'
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    topicName: fulfillmentTopic.outputs.name
+    subscriptionName: fulfillmentTopicSubscriptionName
+    sqlFilterExpression: fulfillmentTopicSqlFilter
   }
 }
 
