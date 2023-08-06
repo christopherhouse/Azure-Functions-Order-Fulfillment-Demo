@@ -15,6 +15,7 @@ public static class Settings
     public const string ReceivedOrdersTopicName = "%ordersTopicName%";
     public const string OrdersForApprovalSubscriptionName = "%ordersForApprovalSubscription%";
     public const string SendCreditApprovalTopicName = "%sendApprovalTopic%";
+    public const string AllCreditApprovalsSubscriptionName = "%allCreditApprovalsSubscription%";
 
     public const string CreditApprovalEventName = "CreditApproved";
 

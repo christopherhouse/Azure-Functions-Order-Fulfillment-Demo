@@ -29,7 +29,7 @@ param statusNotificationTopicName string
 param statusNotificationTopicSubscriptionName string
 param webHookNotificationUrl string
 param sendApprovalTopicName string
-param sendApprovalAllMessagesSubscriptionName string
+param allCreditApprovalsSubscription string
 
 param buildId int = 0
 
@@ -71,7 +71,7 @@ var statusNotificationTopicDeploymentName = '${statusNotificationTopicName}-${bu
 var statusNotificationTopicSubscriptionDeploymentName = '${statusNotificationTopicSubscriptionName}-${buildId}'
 var loadTestingDeploymentName = '${loadTestingName}-${buildId}'
 var sendApprovalTopicDeploymentName = '${sendApprovalTopicName}-${buildId}'
-var sendApprovalAllMessagesSubscriptionDeploymentName = '${sendApprovalAllMessagesSubscriptionName}-${buildId}'
+var allCreditApprovalsSubscriptionDeploymentName = '${allCreditApprovalsSubscription}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -327,10 +327,10 @@ module sendApprovalEventTopic './modules/serviceBus/serviceBusTopic.bicep' = {
 }
 
 module sendApprovalAllMessages './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
-  name: sendApprovalAllMessagesSubscriptionDeploymentName
+  name: allCreditApprovalsSubscriptionDeploymentName
   params: {
     serviceBusNamespaceName: sbNs.outputs.name
-    subscriptionName: sendApprovalAllMessagesSubscriptionName
+    subscriptionName: allCreditApprovalsSubscription
     topicName: sendApprovalEventTopic.outputs.name
     sqlFilterExpression: defaultTopicSqlFilter
   }

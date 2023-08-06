@@ -15,6 +15,7 @@ public class CreditApprovalOrchestration
 
         await context.CallActivityAsync<SendApprovalEventActivity>(nameof(SendApprovalEventActivity),
             context.InstanceId);
+
         var approvedStatus = await context.WaitForExternalEvent<CreditApprovalStatus>(Settings.CreditApprovalEventName);
 
         if (approvedStatus.IsCreditApproved)
