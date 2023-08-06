@@ -54,23 +54,26 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   }
 }
 
-resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'laws'
-  scope: kv
-  properties: {
-    workspaceId: laws.id
-    logs: [
-      {
-        categoryGroup: 'allLogs'
-        enabled: true
-        retentionPolicy: {
-          enabled: true
-          days: 30
-        }
-      }
-    ]
-  }
-}
+// CoPilot prompt:
+// Create a diagnostic setting for the key vault to send the allLogs category to the Log Analytics workspace
+// specified by the 'laws' variable
+// resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+//   name: 'laws'
+//   scope: kv
+//   properties: {
+//     workspaceId: laws.id
+//     logs: [
+//       {
+//         categoryGroup: 'allLogs'
+//         enabled: true
+//         retentionPolicy: {
+//           enabled: true
+//           days: 30
+//         }
+//       }
+//     ]
+//   }
+// }
 
 output id string = kv.id
 output name string = kv.name

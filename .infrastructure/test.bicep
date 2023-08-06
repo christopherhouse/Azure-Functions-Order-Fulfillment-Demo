@@ -24,7 +24,7 @@ resource webApp 'Microsoft.Web/sites@2021-03-01' = {
     serverFarmId: appServicePlan.id
   }
 }
-
+// It works here.  why won't it work in my modules? :(
 resource diagnosticLogs 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: webApp.name
   scope: webApp
