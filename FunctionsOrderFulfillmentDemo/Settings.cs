@@ -12,10 +12,17 @@ public static class Settings
     public const string CosmosLeaseContainerName = "%cosmosLeaseContainerName%";
     public const string StatusNotificationTopic = "%statusNotificationTopic%";
     public const string AllStatusNotificationSubscription = "%allStatusNotificationSubscription%";
+    public const string ReceivedOrdersTopicName = "%ordersTopicName%";
+    public const string OrdersForApprovalSubscriptionName = "%ordersForApprovalSubscription%";
+    public const string SendCreditApprovalTopicName = "%sendApprovalTopic%";
+
+    public const string CreditApprovalEventName = "CreditApproved";
 
     public static int MaxWorkDelayInMilliseconds =>
         Convert.ToInt32(Environment.GetEnvironmentVariable("maxWorkDelayInMilliseconds") ?? "100");
 
     public static string WebHookNotificationUrl =>
         Environment.GetEnvironmentVariable("webHookNotificationUrl") ?? string.Empty;
+
+    public static string EventUriFormatString => Environment.GetEnvironmentVariable("eventUriFormatString") ?? string.Empty;
 }

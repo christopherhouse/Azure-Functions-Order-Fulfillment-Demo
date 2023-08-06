@@ -28,6 +28,8 @@ param cosmosLeaseContainerName string
 param statusNotificationTopicName string
 param statusNotificationTopicSubscriptionName string
 param webHookNotificationUrl string
+param sendApprovalTopicName string
+param sendApprovalAllMessagesSubscriptionName string
 
 param buildId int = 0
 
@@ -68,6 +70,8 @@ var leasesContainerDeploymentName = '${cosmosLeaseContainerName}-${buildId}'
 var statusNotificationTopicDeploymentName = '${statusNotificationTopicName}-${buildId}'
 var statusNotificationTopicSubscriptionDeploymentName = '${statusNotificationTopicSubscriptionName}-${buildId}'
 var loadTestingDeploymentName = '${loadTestingName}-${buildId}'
+var sendApprovalTopicDeploymentName = '${sendApprovalTopicName}-${buildId}'
+var sendApprovalAllMessagesSubscriptionDeploymentName = '${sendApprovalAllMessagesSubscriptionName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -301,6 +305,7 @@ module statusSub './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
     serviceBusNamespaceName: sbNs.outputs.name
     subscriptionName: statusNotificationTopicSubscriptionName
     topicName: statusTopic.outputs.name
+    sqlFilterExpression: defaultTopicSqlFilter
   }
 }
 
@@ -309,6 +314,25 @@ module alt './modules/azureLoadTesting.bicep' = {
   params: {
     loadTestsName: loadTestingName
     location: location
+  }
+}
+
+module sendApprovalEventTopic './modules/serviceBus/serviceBusTopic.bicep' = {
+  name: sendApprovalTopicDeploymentName
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    topicName: sendApprovalTopicName
+    maxTopicSize: maxTopicSize
+  }
+}
+
+module sendApprovalAllMessages './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
+  name: sendApprovalAllMessagesSubscriptionDeploymentName
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    subscriptionName: sendApprovalAllMessagesSubscriptionName
+    topicName: sendApprovalEventTopic.outputs.name
+    sqlFilterExpression: defaultTopicSqlFilter
   }
 }
 
