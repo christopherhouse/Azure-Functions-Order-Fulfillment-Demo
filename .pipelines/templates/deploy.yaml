@@ -87,4 +87,4 @@ stages:
                 scriptType: pscore
                 scriptLocation: scriptPath
                 scriptPath:  $(setFunctionSecretScriptFile)
-                arguments:  -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName) -keyVaultSecretValue $(functionAppKey)
+                arguments:  -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName) -keyVaultSecretValue $(functionKey)

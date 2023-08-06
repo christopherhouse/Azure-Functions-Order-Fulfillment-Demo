@@ -15,6 +15,6 @@ param(
 )
 
 Write-Host "Setting secret value in Key Vault $keyVaultName"
-Set-AzKeyVaultSecret -VaultName $keyVaultName -Name "functionAppKey" -SecretValue $keyVaultSecretValue
+Set-AzKeyVaultSecret -VaultName $keyVaultName -Name "FunctionAppKey" -SecretValue $keyVaultSecretValue
 
 Write-Host "Done!"
