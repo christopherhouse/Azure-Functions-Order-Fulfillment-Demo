@@ -25,6 +25,8 @@ param shipmentTopicName string
 param shipmentTopicSubscriptionName string
 param maxWorkDelayInMilliseconds int = 100
 param cosmosLeaseContainerName string
+param statusNotificationTopicName string
+param statusNotificationTopicSubscriptionName string
 
 param buildId int = 0
 
@@ -61,6 +63,8 @@ var cosmosDbDatabaseDeploymentName = '${cosmosDbDatabaseName}-${buildId}'
 var orderContainerDeploymentName = '${ordersCosmosContainerName}-${buildId}'
 var shipmentTopicDeploymentName = '${shipmentTopicName}-${buildId}'
 var leasesContainerDeploymentName = '${cosmosLeaseContainerName}-${buildId}'
+var statusNotificationTopicDeploymentName = '${statusNotificationTopicName}-${buildId}'
+var statusNotificationTopicSubscriptionDeploymentName = '${statusNotificationTopicSubscriptionName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -275,6 +279,24 @@ module leases './modules/cosmos/cosmosContainer.bicep' = {
     databaseName: cosmosDb.outputs.name
     partitionKey: '/id'
     maxRUs: maxContainerRUs
+  }
+}
+
+module statusTopic './modules/serviceBus/serviceBusTopic.bicep' = {
+  name: statusNotificationTopicDeploymentName
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    topicName: statusNotificationTopicName
+    maxTopicSize: maxTopicSize
+  }
+}
+
+module statusSub './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
+  name: statusNotificationTopicSubscriptionDeploymentName
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    subscriptionName: statusNotificationTopicSubscriptionName
+    topicName: statusTopic.outputs.name
   }
 }
 
