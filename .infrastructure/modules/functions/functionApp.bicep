@@ -14,6 +14,12 @@ param fulfillmentTopic string
 param approvedOrdersSubscription string
 param maxWorkDelayInMilliseconds int
 param cosmosLeaseContainerName string
+param logAnalyticsWorkspaceName string
+
+resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
+  name: logAnalyticsWorkspaceName
+  scope: resourceGroup()
+}
 
 resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
   name: storageAccountName
@@ -98,6 +104,24 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
       ]
     }
+  }
+}
+
+resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: app
+  name: 'laws'
+  properties: {
+    workspaceId: laws.id
+    logs: [
+      {
+        category: 'functionApplicationLogs'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 30
+        }
+      }
+    ]
   }
 }
 

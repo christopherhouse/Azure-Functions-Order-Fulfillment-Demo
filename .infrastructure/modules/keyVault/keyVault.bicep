@@ -2,7 +2,13 @@ param keyVaultName string
 param location string
 param adminIdentities array
 param applicationIdentities array
+param logAnalyticsWorkspaceName string
 param tags object
+
+resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
+  name: logAnalyticsWorkspaceName
+  scope: resourceGroup()
+}
 
 var adminPolicies = [for id in adminIdentities: {
   tenantId: subscription().tenantId
@@ -45,6 +51,24 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
       ipRules: []
       virtualNetworkRules: []
     }
+  }
+}
+
+resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: kv
+  name: 'laws'
+  properties: {
+    workspaceId: laws.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 30
+        }
+      }
+    ]
   }
 }
 
