@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
-using FunctionsOrderFulfillmentDemo.Models.Requests;
+using FunctionsOrderFulfillmentDemo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace FunctionsOrderFulfillmentDemo.Models.Requests;
+namespace FunctionsOrderFulfillmentDemo.Models;
 
 public class SubmitOrderRequest
 {

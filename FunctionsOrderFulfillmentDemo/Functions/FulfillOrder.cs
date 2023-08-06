@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
-using FunctionsOrderFulfillmentDemo.Models.Requests;
+using FunctionsOrderFulfillmentDemo.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.ServiceBus;
