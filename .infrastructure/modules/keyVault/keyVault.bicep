@@ -55,7 +55,7 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
 }
 
 resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: kv.name
+  name: 'laws'
   scope: kv
   properties: {
     workspaceId: laws.id
