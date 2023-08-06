@@ -15,6 +15,7 @@ param approvedOrdersSubscription string
 param maxWorkDelayInMilliseconds int
 param cosmosLeaseContainerName string
 param logAnalyticsWorkspaceName string
+param webHookNotificationUrl string
 
 resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
   name: logAnalyticsWorkspaceName
@@ -101,6 +102,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'cosmosLeaseContainerName'
           value: cosmosLeaseContainerName
+        }
+        {
+          name: 'webHookNotificationUrl'
+          value: webHookNotificationUrl
         }
       ]
     }

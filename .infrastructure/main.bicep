@@ -27,6 +27,7 @@ param maxWorkDelayInMilliseconds int = 100
 param cosmosLeaseContainerName string
 param statusNotificationTopicName string
 param statusNotificationTopicSubscriptionName string
+param webHookNotificationUrl string
 
 param buildId int = 0
 
@@ -210,6 +211,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     maxWorkDelayInMilliseconds: maxWorkDelayInMilliseconds
     cosmosLeaseContainerName: cosmosLeaseContainerName
     logAnalyticsWorkspaceName: laws.outputs.id
+    webHookNotificationUrl: webHookNotificationUrl
     tags: tags
   }
 }
