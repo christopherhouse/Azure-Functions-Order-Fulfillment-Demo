@@ -77,3 +77,4 @@ stages:
                 ScriptType:  FilePath
                 ScriptPath:  $(secretScriptFile)
                 ScriptArguments:  -functionAppName $(functionAppName) -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName)
+                azurePowerShellVersion: LatestVersion
