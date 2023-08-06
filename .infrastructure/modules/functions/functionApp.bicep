@@ -8,6 +8,8 @@ param cosmosDbConnectionStringSecretUri string
 param tags object
 param ordersTopicName string
 param serviceBusConnectionStringSecretUri string
+param ordersContainerName string
+param cosmosDbName string
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -65,6 +67,14 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'serviceBusConnectionString'
           value: '@Microsoft.KeyVault(SecretUri=${serviceBusConnectionStringSecretUri})'
+        }
+        {
+          name: 'cosmosDbName'
+          value: cosmosDbName
+        }
+        {
+          name: 'ordersContainerName'
+          value: ordersContainerName
         }
       ]
     }

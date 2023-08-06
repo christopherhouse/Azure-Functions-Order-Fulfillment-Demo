@@ -34,7 +34,10 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Accepted, Description = "The Accepted response")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            [ServiceBus("%ordersTopicName%", ServiceBusEntityType.Topic, Connection = "serviceBusConnectionString")] IAsyncCollector<ServiceBusMessage> output)
+            [ServiceBus("%ordersTopicName%", ServiceBusEntityType.Topic, Connection = "serviceBusConnectionString")] IAsyncCollector<ServiceBusMessage> topicOutput,
+            [CosmosDB(databaseName: "%cosmosDbName%",
+                containerName: "%ordersContainerName%",
+                Connection = "COSMOS_CONNECTION_STRING")] IAsyncCollector<SubmitOrderRequest> cosmosOutput)
         {
             using var reader = new StreamReader(req.Body);
             var requestBody = await reader.ReadToEndAsync();
@@ -50,7 +53,8 @@ namespace FunctionsOrderFulfillmentDemo.Functions
 
             message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
 
-            await output.AddAsync(message);
+            await cosmosOutput.AddAsync(orderRequest);
+            await topicOutput.AddAsync(message);
 
             return new AcceptedResult(orderId, null);
         }

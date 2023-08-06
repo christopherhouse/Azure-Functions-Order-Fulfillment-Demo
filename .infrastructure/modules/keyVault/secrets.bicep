@@ -5,7 +5,7 @@ param serviceBusNamespaceId string
 param buildId int
 
 var serviceBus = '${serviceBusNamespaceId}/AuthorizationRules/RootManageSharedAccessKey'
-var serviceBusConnectionString = listKeys(serviceBus, '2021-06-01').primaryConnectionString
+var serviceBusConnectionString = listKeys(serviceBus, '2022-10-01-preview').primaryConnectionString
 
 resource ai 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName

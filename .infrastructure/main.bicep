@@ -191,6 +191,8 @@ module funcApp './modules/functions/functionApp.bicep' = {
     cosmosDbConnectionStringSecretUri: secrets.outputs.cosmosDbConnectionStringUri
     serviceBusConnectionStringSecretUri: secrets.outputs.serviceBusConnectionStringUri
     ordersTopicName: ordersTopicName
+    cosmosDbName: cosmosDb.outputs.name
+    ordersContainerName: ordersCosmosContainerName
     tags: tags
   }
 }
