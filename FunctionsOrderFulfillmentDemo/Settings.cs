@@ -15,4 +15,7 @@ public static class Settings
 
     public static int MaxWorkDelayInMilliseconds =>
         Convert.ToInt32(Environment.GetEnvironmentVariable("maxWorkDelayInMilliseconds") ?? "100");
+
+    public static string WebHookNotificationUrl =>
+        Environment.GetEnvironmentVariable("webHookNotificationUrl") ?? string.Empty;
 }
