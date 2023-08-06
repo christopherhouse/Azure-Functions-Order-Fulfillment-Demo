@@ -107,23 +107,26 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
   }
 }
 
-resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: app.name
-  scope: app
-  properties: {
-    workspaceId: laws.id
-    logs: [
-      {
-        category: 'functionApplicationLogs'
-        enabled: true
-        retentionPolicy: {
-          enabled: true
-          days: 30
-        }
-      }
-    ]
-  }
-}
+// For some reason this seems to insert an extra /providers/ segment when doing this inside a module, maybe?
+// test.bicep deploys fine without a module
+
+// resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+//   name: app.name
+//   scope: app
+//   properties: {
+//     workspaceId: laws.id
+//     logs: [
+//       {
+//         category: 'functionApplicationLogs'
+//         enabled: true
+//         retentionPolicy: {
+//           enabled: true
+//           days: 30
+//         }
+//       }
+//     ]
+//   }
+// }
 
 output id string = app.id
 output name string = app.name
