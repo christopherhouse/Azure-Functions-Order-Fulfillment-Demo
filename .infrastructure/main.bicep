@@ -24,6 +24,7 @@ param fulfillmentTopicSubscriptionName string
 param shipmentTopicName string
 param shipmentTopicSubscriptionName string
 param maxWorkDelayInMilliseconds int = 100
+param cosmosLeaseContainerName string
 
 param buildId int = 0
 
@@ -59,6 +60,7 @@ var cosmosDbAccountDeploymentName = '${cosmosDbAccountName}-${buildId}'
 var cosmosDbDatabaseDeploymentName = '${cosmosDbDatabaseName}-${buildId}'
 var orderContainerDeploymentName = '${ordersCosmosContainerName}-${buildId}'
 var shipmentTopicDeploymentName = '${shipmentTopicName}-${buildId}'
+var leasesContainerDeploymentName = '${cosmosLeaseContainerName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -200,6 +202,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     fulfillmentTopic: fulfillmentTopic.outputs.name
     approvedOrdersSubscription: fulfillmentTopicSubscriptionName
     maxWorkDelayInMilliseconds: maxWorkDelayInMilliseconds
+    cosmosLeaseContainerName: cosmosLeaseContainerName
     tags: tags
   }
 }
@@ -261,5 +264,15 @@ module shipmentSubscription './modules/serviceBus/serviceBusTopicSubscription.bi
   }
 }
 
+module leases './modules/cosmos/cosmosContainer.bicep' = {
+  name: leasesContainerDeploymentName
+  params: {
+    containerName: cosmosLeaseContainerName
+    cosmosAccountName: cosmosAccount.outputs.name
+    databaseName: cosmosDb.outputs.name
+    partitionKey: '/id'
+    maxRUs: maxContainerRUs
+  }
+}
 
 output functionAppName string = funcApp.outputs.name

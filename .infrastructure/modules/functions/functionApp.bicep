@@ -13,6 +13,7 @@ param cosmosDbName string
 param fulfillmentTopic string
 param approvedOrdersSubscription string
 param maxWorkDelayInMilliseconds int
+param cosmosLeaseContainerName string
 
 resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
   name: storageAccountName
@@ -90,6 +91,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'maxWorkDelayInMilliseconds'
           value: string(maxWorkDelayInMilliseconds)
+        }
+        {
+          name: 'cosmosLeaseContainerName'
+          value: cosmosLeaseContainerName
         }
       ]
     }
