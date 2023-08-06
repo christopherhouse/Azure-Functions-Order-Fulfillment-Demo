@@ -11,6 +11,9 @@ public class SubmitOrderRequest
         LineItems = new List<OrderLineItem>();
     }
 
+    [JsonProperty("id")]
+    public string Id { get; set; }
+
     [JsonProperty("customerId")]
     public string CustomerId { get; set; }
 
@@ -19,4 +22,7 @@ public class SubmitOrderRequest
 
     [JsonProperty("lineItems")]
     public IList<OrderLineItem> LineItems { get; }
+
+    [JsonProperty("status")]
+    public string Status { get; set; }
 }

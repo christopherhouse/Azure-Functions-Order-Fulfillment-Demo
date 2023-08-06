@@ -42,14 +42,17 @@ namespace FunctionsOrderFulfillmentDemo.Functions
             using var reader = new StreamReader(req.Body);
             var requestBody = await reader.ReadToEndAsync();
             var orderRequest = JsonConvert.DeserializeObject<SubmitOrderRequest>(requestBody);
-
+            
             var orderId = Guid.NewGuid().ToString();
+            orderRequest.Id = orderId;
 
             var message = new ServiceBusMessage(requestBody)
             {
                 CorrelationId = orderId,
                 ContentType = "application/json"
             };
+
+            orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
 
             message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
 
