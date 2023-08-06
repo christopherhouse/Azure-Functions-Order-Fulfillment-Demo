@@ -70,11 +70,11 @@ stages:
                 appName: $(functionAppName)
                 package: $(functionPackage)
 
-            - task: AzurePowerShell@5
+            - task: AzureCLI@2
               displayName: Set Function Key Secret in Key Vault
               inputs:
                 azureSubscription: ${{ parameters.serviceConnectionName }}
-                ScriptType:  FilePath
-                ScriptPath:  $(secretScriptFile)
-                ScriptArguments:  -functionAppName $(functionAppName) -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName)
-                azurePowerShellVersion: LatestVersion
+                scriptType: pscore
+                scriptLocation: scriptPath
+                scriptPath:  $(secretScriptFile)
+                arguments:  -functionAppName $(functionAppName) -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName)
