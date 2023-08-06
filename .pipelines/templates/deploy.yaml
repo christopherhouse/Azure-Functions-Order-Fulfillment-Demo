@@ -23,7 +23,8 @@ stages:
         parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
         variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.ps1
         functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
-        setFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/setfunctionkey.sh
+        setFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/set-function-key-secret.sh
+      strategy:
         runOnce:
           deploy:
             steps:
