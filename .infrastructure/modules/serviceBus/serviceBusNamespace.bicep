@@ -25,7 +25,7 @@ resource sbns 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
 
 resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: sbns
-  name: 'laws'
+  name: sbns.name
   properties: {
     workspaceId: laws.id
     logs: [
