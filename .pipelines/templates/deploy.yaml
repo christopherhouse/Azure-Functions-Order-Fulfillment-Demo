@@ -72,19 +72,19 @@ stages:
                 package: $(functionPackage)
 
             - task: AzureCLI@2
-              displayName: Get Function App Key
+              displayName: Set Function App Key
               inputs:
                 azureSubscription: ${{ parameters.serviceConnectionName }}
                 scriptPath: $(getFunctionSecretScriptFile)
                 scriptType: bash
                 scriptLocation: scriptPath
-                arguments: ${{ parameters.resourceGroupName }} $(functionAppName)
+                arguments: ${{ parameters.resourceGroupName }} $(functionAppName) $(keyVaultName)
 
-            - task: AzureCLI@2
-              displayName: Set Function Key Secret in Key Vault
-              inputs:
-                azureSubscription: ${{ parameters.serviceConnectionName }}
-                scriptType: pscore
-                scriptLocation: scriptPath
-                scriptPath:  $(setFunctionSecretScriptFile)
-                arguments:  -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName) -keyVaultSecretValue $(functionKey)
+            # - task: AzureCLI@2
+            #   displayName: Set Function Key Secret in Key Vault
+            #   inputs:
+            #     azureSubscription: ${{ parameters.serviceConnectionName }}
+            #     scriptType: pscore
+            #     scriptLocation: scriptPath
+            #     scriptPath:  $(setFunctionSecretScriptFile)
+            #     arguments:  -resourceGroupname ${{ parameters.resourceGroupName }} -keyVaultName $(keyVaultName) -keyVaultSecretValue $(functionKey)
