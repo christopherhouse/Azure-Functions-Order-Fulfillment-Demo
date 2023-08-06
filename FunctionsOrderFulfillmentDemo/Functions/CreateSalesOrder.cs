@@ -15,51 +15,49 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
-namespace FunctionsOrderFulfillmentDemo.Functions
+namespace FunctionsOrderFulfillmentDemo.Functions;
+
+public class CreateSalesOrder
 {
-    public class CreateSalesOrder
+    private readonly ILogger<CreateSalesOrder> _logger;
+
+    public CreateSalesOrder(ILogger<CreateSalesOrder> log)
     {
-        private readonly ILogger<CreateSalesOrder> _logger;
+        _logger = log;
+    }
 
-        public CreateSalesOrder(ILogger<CreateSalesOrder> log)
-        {
-            _logger = log;
-        }
-
-        [FunctionName(nameof(CreateSalesOrder))]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "name" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiRequestBody("application/json", typeof(SubmitOrderRequest))]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
-        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Accepted, Description = "The Accepted response")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            [ServiceBus("%ordersTopicName%", ServiceBusEntityType.Topic, Connection = "serviceBusConnectionString")] IAsyncCollector<ServiceBusMessage> topicOutput,
-            [CosmosDB(databaseName: "%cosmosDbName%",
-                containerName: "%ordersContainerName%",
-                Connection = "COSMOS_CONNECTION_STRING")] IAsyncCollector<SubmitOrderRequest> cosmosOutput)
-        {
-            using var reader = new StreamReader(req.Body);
-            var requestBody = await reader.ReadToEndAsync();
-            var orderRequest = JsonConvert.DeserializeObject<SubmitOrderRequest>(requestBody);
+    [FunctionName(nameof(CreateSalesOrder))]
+    [OpenApiOperation(operationId: "Run", tags: new[] { "name" })]
+    [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+    [OpenApiRequestBody("application/json", typeof(SubmitOrderRequest))]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Accepted, Description = "The Accepted response")]
+    public async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+        [ServiceBus("%ordersTopicName%", ServiceBusEntityType.Topic, Connection = Connections.ServiceBusConnectionString)] IAsyncCollector<ServiceBusMessage> topicOutput,
+        [CosmosDB(databaseName: "%cosmosDbName%",
+            containerName: "%ordersContainerName%",
+            Connection = Connections.CosmosConnectionString)] IAsyncCollector<SubmitOrderRequest> cosmosOutput)
+    {
+        using var reader = new StreamReader(req.Body);
+        var requestBody = await reader.ReadToEndAsync();
+        var orderRequest = JsonConvert.DeserializeObject<SubmitOrderRequest>(requestBody);
             
-            var orderId = Guid.NewGuid().ToString();
-            orderRequest.Id = orderId;
-            orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
+        var orderId = Guid.NewGuid().ToString();
+        orderRequest.Id = orderId;
+        orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
 
-            var message = new ServiceBusMessage(JsonConvert.SerializeObject(orderRequest))
-            {
-                CorrelationId = orderId,
-                ContentType = "application/json"
-            };
+        var message = new ServiceBusMessage(JsonConvert.SerializeObject(orderRequest))
+        {
+            CorrelationId = orderId,
+            ContentType = "application/json"
+        };
 
-            message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
+        message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
 
-            await cosmosOutput.AddAsync(orderRequest);
-            await topicOutput.AddAsync(message);
+        await cosmosOutput.AddAsync(orderRequest);
+        await topicOutput.AddAsync(message);
 
-            return new AcceptedResult(orderId, null);
-        }
+        return new AcceptedResult(orderId, null);
     }
 }
-

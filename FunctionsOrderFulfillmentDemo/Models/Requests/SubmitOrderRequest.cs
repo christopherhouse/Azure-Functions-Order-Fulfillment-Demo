@@ -25,4 +25,8 @@ public class SubmitOrderRequest
 
     [JsonProperty("status")]
     public string Status { get; set; }
+
+    public static SubmitOrderRequest FromJson(string json) => JsonConvert.DeserializeObject<SubmitOrderRequest>(json);
+
+    public string ToJsonString() => JsonConvert.SerializeObject(this);
 }

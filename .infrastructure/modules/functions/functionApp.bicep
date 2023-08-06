@@ -10,6 +10,8 @@ param ordersTopicName string
 param serviceBusConnectionStringSecretUri string
 param ordersContainerName string
 param cosmosDbName string
+param fulfillmentTopic string
+param approvedOrdersSubscription string
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -75,6 +77,14 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'ordersContainerName'
           value: ordersContainerName
+        }
+        {
+          name: 'fulfillmentTopic'
+          value: fulfillmentTopic
+        }
+        {
+          name: 'approvedOrdersSubscription'
+          value: approvedOrdersSubscription
         }
       ]
     }

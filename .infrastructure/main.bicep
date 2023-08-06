@@ -20,11 +20,14 @@ param keyVaultAdminIdentities array = []
 param cosmosDbDatabaseName string
 param ordersCosmosContainerName string
 param orderContainerPartitionKey string
-param fulfillmentTopicSqlFilter string
 param fulfillmentTopicSubscriptionName string
+param shipmentTopicName string
+param shipmentTopicSubscriptionName string
+
 
 param buildId int = 0
 
+var defaultTopicSqlFilter = '1=1'
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 var baseNameNoDashes = replace(baseName, '-', '')
 
@@ -54,7 +57,7 @@ var secretsDeploymentName = 'secrets-${buildId}'
 var cosmosDbAccountDeploymentName = '${cosmosDbAccountName}-${buildId}'
 var cosmosDbDatabaseDeploymentName = '${cosmosDbDatabaseName}-${buildId}'
 var orderContainerDeploymentName = '${ordersCosmosContainerName}-${buildId}'
-
+var shipmentTopicDeploymentName = '${shipmentTopicName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -118,7 +121,7 @@ module fulfillmentSubscription './modules/serviceBus/serviceBusTopicSubscription
     serviceBusNamespaceName: sbNs.outputs.name
     topicName: fulfillmentTopic.outputs.name
     subscriptionName: fulfillmentTopicSubscriptionName
-    sqlFilterExpression: fulfillmentTopicSqlFilter
+    sqlFilterExpression: defaultTopicSqlFilter
   }
 }
 
@@ -193,6 +196,8 @@ module funcApp './modules/functions/functionApp.bicep' = {
     ordersTopicName: ordersTopicName
     cosmosDbName: cosmosDb.outputs.name
     ordersContainerName: ordersCosmosContainerName
+    fulfillmentTopic: fulfillmentTopic.outputs.name
+    approvedOrdersSubscription: fulfillmentTopicSubscriptionName
     tags: tags
   }
 }
@@ -233,5 +238,25 @@ module ordersContainer './modules/cosmos/cosmosContainer.bicep' = {
     partitionKey: orderContainerPartitionKey
   }
 }
+
+module shipmentTopic './modules/serviceBus/serviceBusTopic.bicep' = {
+  name: shipmentTopicDeploymentName
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    topicName: shipmentTopicName
+    maxTopicSize: maxTopicSize
+  }
+}
+
+module shipmentSubscription './modules/serviceBus/serviceBusTopicSubscription.bicep' = {
+  name: '${shipmentTopicName}-subscription-${buildId}'
+  params: {
+    serviceBusNamespaceName: sbNs.outputs.name
+    topicName: shipmentTopic.outputs.name
+    subscriptionName: shipmentTopicSubscriptionName
+    sqlFilterExpression: defaultTopicSqlFilter
+  }
+}
+
 
 output functionAppName string = funcApp.outputs.name
