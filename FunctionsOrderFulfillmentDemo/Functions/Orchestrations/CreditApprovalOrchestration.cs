@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FunctionsOrderFulfillmentDemo.Functions.Activities;
 using FunctionsOrderFulfillmentDemo.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -10,13 +11,15 @@ public class CreditApprovalOrchestration
     [FunctionName(nameof(CreditApprovalOrchestration))]
     public async Task RunOrchestration([OrchestrationTrigger] IDurableOrchestrationContext context)
     {
-        var input = context.GetInput<SubmitOrderRequest>();
+        var order = context.GetInput<SubmitOrderRequest>();
 
-        var approvedStaus = await context.WaitForExternalEvent<CreditApprovalStatus>(Settings.CreditApprovalEventName);
+        await context.CallActivityAsync<SendApprovalEventActivity>(nameof(SendApprovalEventActivity),
+            context.InstanceId);
+        var approvedStatus = await context.WaitForExternalEvent<CreditApprovalStatus>(Settings.CreditApprovalEventName);
 
-        if (approvedStaus.IsCreditApproved)
+        if (approvedStatus.IsCreditApproved)
         {
-
+            await context.CallActivityAsync<SendOrderToFulfillmentActivity>(nameof(SendApprovalEventActivity), order);
         }
     }
 }

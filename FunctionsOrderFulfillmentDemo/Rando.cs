@@ -19,4 +19,13 @@ public static class Rando
 
         return rando;
     }
+
+    public static DateTime RandomFutureDateTime(int maxMilliseconds)
+    {
+        var ms = RandomInteger(maxMilliseconds) + 200; // Adding a few extra ms for latency and all that
+
+        var dt = DateTime.UtcNow.AddMilliseconds(ms);
+
+        return dt;
+    }
 }
