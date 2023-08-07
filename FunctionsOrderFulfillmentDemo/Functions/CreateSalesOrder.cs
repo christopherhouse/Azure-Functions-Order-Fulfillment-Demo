@@ -39,25 +39,40 @@ public class CreateSalesOrder
             containerName: "%ordersContainerName%",
             Connection = Connections.CosmosConnectionString)] IAsyncCollector<SubmitOrderRequest> cosmosOutput)
     {
+        IActionResult result;
         using var reader = new StreamReader(req.Body);
         var requestBody = await reader.ReadToEndAsync();
         var orderRequest = JsonConvert.DeserializeObject<SubmitOrderRequest>(requestBody);
-            
-        var orderId = Guid.NewGuid().ToString();
-        orderRequest.Id = orderId;
-        orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
 
-        var message = new ServiceBusMessage(JsonConvert.SerializeObject(orderRequest))
+        if (orderRequest != null)
         {
-            CorrelationId = orderId,
-            ContentType = "application/json"
-        };
+            var orderId = Guid.NewGuid().ToString();
+            orderRequest.Id = orderId;
+            orderRequest.Status = orderRequest.Total > 1000 ? "Pending Approval" : "Approved";
 
-        message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
+            var message = new ServiceBusMessage(JsonConvert.SerializeObject(orderRequest))
+            {
+                CorrelationId = orderId,
+                ContentType = "application/json"
+            };
 
-        await cosmosOutput.AddAsync(orderRequest);
-        await topicOutput.AddAsync(message);
+            message.ApplicationProperties.Add("orderTotal", orderRequest.Total);
 
-        return new AcceptedResult(orderId, null);
+            await cosmosOutput.AddAsync(orderRequest);
+            await topicOutput.AddAsync(message);
+            result = new AcceptedResult(GetLocationEndpoint(orderRequest.CustomerId, orderRequest.Id), null);
+        }
+        else
+        {
+            result = new BadRequestResult();
+        }
+
+        return result;
+    }
+
+    private static string GetLocationEndpoint(string customerId, string orderId)
+    {
+        var uriString = $"{Settings.FunctionAppHostName}/api/orderStatus/{customerId}/{orderId}";
+        return uriString;
     }
 }

@@ -124,6 +124,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           name: 'functionAppKey'
           value: '@Microsoft.KeyVault(SecretUri=${functionAppKeyUri})'
         }
+        {
+          name: 'functionAppBaseUrl'
+          value: 'https://{functionAppName}.azurewebsites.net}'
+        }
       ]
     }
   }

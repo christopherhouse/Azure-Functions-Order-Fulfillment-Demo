@@ -28,4 +28,6 @@ public static class Settings
     public static string EventUriFormatString => Environment.GetEnvironmentVariable("eventUriFormatString") ?? string.Empty;
 
     public static string FunctionAppKey => Environment.GetEnvironmentVariable("functionAppKey") ?? string.Empty;
+
+    public static string FunctionAppHostName => Environment.GetEnvironmentVariable("functionAppHostName") ?? string.Empty;
 }
