@@ -4,6 +4,7 @@ param appServicePlanId string
 param managedIdentityResourceId string
 param storageAccountName string
 param appInsightsInstrumentationkeySecretUri string
+param appInsightsConnectionStringSecretUri string
 param cosmosDbConnectionStringSecretUri string
 param tags object
 param ordersTopicName string
@@ -31,7 +32,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
 resource app 'Microsoft.Web/sites@2022-09-01' = {
   name: functionAppName
   location: location
-  kind: 'functionapp,linux'
+  kind: 'functionapp'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -44,11 +45,14 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
     serverFarmId: appServicePlanId
     httpsOnly: true
     siteConfig: {
-      linuxFxVersion: 'DOTNET|6.0'
       appSettings: [
         {
-          name: 'AzureWebJobsStorage__accountName'
-          value: storageAccountName
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storage.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(uniqueString(functionAppName))
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -67,6 +71,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: '@Microsoft.KeyVault(SecretUri=${appInsightsInstrumentationkeySecretUri})'
+        }
+        {
+          name: 'Application:Insights:ConnectionString'
+          value: '@Microsoft.KeyVault(SecretUri=${appInsightsConnectionStringSecretUri})'
         }
         {
           name: 'COSMOS_CONNECTION_STRING'

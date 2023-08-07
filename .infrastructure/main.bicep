@@ -210,6 +210,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     managedIdentityResourceId: funcUami.outputs.id
     storageAccountName: funcStorage.outputs.name
     appInsightsInstrumentationkeySecretUri: secrets.outputs.appInsightsInstrumentationkeyUri
+    appInsightsConnectionStringSecretUri: secrets.outputs.appInsightsConnectionStringUri
     cosmosDbConnectionStringSecretUri: secrets.outputs.cosmosDbConnectionStringUri
     serviceBusConnectionStringSecretUri: secrets.outputs.serviceBusConnectionStringUri
     ordersTopicName: ordersTopicName
