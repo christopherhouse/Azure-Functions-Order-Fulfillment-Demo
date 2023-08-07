@@ -25,7 +25,8 @@ var appPolicies = [for id in applicationIdentities: {
   tenantId: subscription().tenantId
   objectId: id
   permissions: {
-    secrets: ['Get'
+    secrets: [
+      'Get'
       'List'
   ]
   }
@@ -35,7 +36,10 @@ var pipelinePolicies = [{
   tenantId: subscription().tenantId
   objectId: pipelineServicePrincipalId
   permissions: {
-    secrets: [ 'Set']
+    secrets: [ 
+    'Set'
+    'List'
+  ]
   }
 }]
 
