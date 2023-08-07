@@ -2,6 +2,7 @@ param keyVaultName string
 param location string
 param adminIdentities array
 param applicationIdentities array
+param pipelineServicePrincipalId string
 param logAnalyticsWorkspaceName string
 param tags object
 
@@ -30,7 +31,15 @@ var appPolicies = [for id in applicationIdentities: {
   }
 }]
 
-var policies = union(adminPolicies, appPolicies)
+var pipelinePolicies = [{
+  tenantId: subscription().tenantId
+  objectId: pipelineServicePrincipalId
+  permissions: {
+    secrets: [ 'Set']
+  }
+}]
+
+var policies = union(adminPolicies, appPolicies, pipelinePolicies)
 
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: keyVaultName

@@ -30,6 +30,7 @@ param statusNotificationTopicSubscriptionName string
 param webHookNotificationUrl string
 param sendApprovalTopicName string
 param allCreditApprovalsSubscription string
+param pipelineServicePrincipalId string
 
 param buildId int = 0
 
@@ -73,7 +74,6 @@ var statusNotificationTopicSubscriptionDeploymentName = '${statusNotificationTop
 var loadTestingDeploymentName = '${loadTestingName}-${buildId}'
 var sendApprovalTopicDeploymentName = '${sendApprovalTopicName}-${buildId}'
 var allCreditApprovalsSubscriptionDeploymentName = '${allCreditApprovalsSubscription}-${buildId}'
-var functionKeyDeploymentName = '${functionAppKeyName}-${buildId}'
 
 var tags = {
   BuildId: buildId
@@ -169,6 +169,7 @@ module kv './modules/keyVault/keyVault.bicep' = {
     adminIdentities: keyVaultAdminIdentities
     applicationIdentities: [ funcUami.outputs.principalId ]
     logAnalyticsWorkspaceName: laws.outputs.id
+    pipelineServicePrincipalId: pipelineServicePrincipalId
     tags: tags
   }
 }
