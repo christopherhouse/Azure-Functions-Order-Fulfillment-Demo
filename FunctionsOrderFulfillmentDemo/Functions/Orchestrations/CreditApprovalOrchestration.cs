@@ -20,7 +20,7 @@ public class CreditApprovalOrchestration
 
         if (approvedStatus.IsCreditApproved)
         {
-            await context.CallActivityAsync<SendOrderToFulfillmentActivity>(nameof(SendApprovalEventActivity), order);
+            await context.CallActivityAsync<SendOrderToFulfillmentActivity>(nameof(SendOrderToFulfillmentActivity), order);
         }
     }
 }

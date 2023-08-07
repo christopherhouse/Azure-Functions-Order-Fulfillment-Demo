@@ -14,7 +14,7 @@ namespace FunctionsOrderFulfillmentDemo.Functions
     public static class EnvironmentChecker
     {
         [FunctionName("EnvironmentChecker")]
-        public static async Task<IActionResult> Run(
+        public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -23,8 +23,8 @@ namespace FunctionsOrderFulfillmentDemo.Functions
             try
             {
                 var appInsights = Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY");
-                var cosmos = Environment.GetEnvironmentVariable("CosmosDBConnectionString");
-                var serviceBus = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
+                var cosmos = Environment.GetEnvironmentVariable(Connections.CosmosConnectionString);
+                var serviceBus = Environment.GetEnvironmentVariable(Connections.ServiceBusConnectionString);
 
                 results.Add(nameof(appInsights), !string.IsNullOrWhiteSpace(appInsights));
                 results.Add(nameof(cosmos), !string.IsNullOrWhiteSpace(cosmos));

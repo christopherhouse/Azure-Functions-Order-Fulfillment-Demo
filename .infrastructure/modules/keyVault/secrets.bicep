@@ -68,3 +68,4 @@ output appInsightsInstrumentationkeyUri string = aiKeySecret.outputs.secretUri
 output appInsightsConnectionStringUri string = aiConnStringSecret.outputs.secretUri
 output cosmosDbConnectionStringUri string = cosmosDbConnStringSecret.outputs.secretUri
 output serviceBusConnectionStringUri string = sbConnStringSecret.outputs.secretUri
+output functionAppKeyUri string = functionKeySecret.outputs.secretUri

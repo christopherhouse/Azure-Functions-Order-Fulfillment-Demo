@@ -25,12 +25,7 @@ public class SendApprovalEventActivity
             ServiceBusEntityType.Topic,
             Connection = Connections.ServiceBusConnectionString)] IAsyncCollector<ServiceBusMessage> messages)
     {
-        var eventUri = new Uri(string.Format(Settings.WebHookNotificationUrl, instanceId));
-
-        var eventContent = new SendEventUri()
-        {
-            EventUri = eventUri
-        };
+        var eventContent = new SendEventUri(instanceId);
 
         await messages.AddAsync(Messaging.CreateMessage(eventContent));
     }

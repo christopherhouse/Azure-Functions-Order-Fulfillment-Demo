@@ -16,6 +16,7 @@ param maxWorkDelayInMilliseconds int
 param cosmosLeaseContainerName string
 param logAnalyticsWorkspaceName string
 param webHookNotificationUrl string
+param functionAppKeyUri string
 
 resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
   name: logAnalyticsWorkspaceName
@@ -110,6 +111,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'eventUriFormatString'
           value: 'https://{functionAppName}.azurewebsites.net/runtime/webhooks/durabletask/instances/{instanceId}/CreditApproved&code={1}'
+        }
+        {
+          name: 'functionAppKey'
+          value: '@Microsoft.KeyVault(SecretUri=${functionAppKeyUri})'
         }
       ]
     }

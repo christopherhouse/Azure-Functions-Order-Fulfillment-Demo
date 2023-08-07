@@ -28,6 +28,7 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         {
             try
             {
+                // Send call to webhook endpoint to share status update
                 var content = new StringContent(statusNotification);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 var response = await _httpClient.PostAsync(_webhookUri, content);

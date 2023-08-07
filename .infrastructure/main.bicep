@@ -221,6 +221,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     cosmosLeaseContainerName: cosmosLeaseContainerName
     logAnalyticsWorkspaceName: laws.outputs.id
     webHookNotificationUrl: webHookNotificationUrl
+    functionAppKeyUri: secrets.outputs.functionAppKeyUri
     tags: tags
   }
 }

@@ -26,4 +26,6 @@ public static class Settings
         Environment.GetEnvironmentVariable("webHookNotificationUrl") ?? string.Empty;
 
     public static string EventUriFormatString => Environment.GetEnvironmentVariable("eventUriFormatString") ?? string.Empty;
+
+    public static string FunctionAppKey => Environment.GetEnvironmentVariable("functionAppKey") ?? string.Empty;
 }
