@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using FunctionsOrderFulfillmentDemo.Models;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.ServiceBus;
@@ -12,11 +13,11 @@ namespace FunctionsOrderFulfillmentDemo.Functions.Activities;
 
 public class SendApprovalEventActivity
 {
-    private readonly HttpClient _httpClient;
+    private readonly TelemetryClient _telemetryClient;
 
-    public SendApprovalEventActivity(HttpClient httpClient)
+    public SendApprovalEventActivity(HttpClient httpClient, TelemetryConfiguration telemetryConfiguration)
     {
-        _httpClient = httpClient;
+        _telemetryClient = new TelemetryClient(telemetryConfiguration); 
     }
 
     [FunctionName(nameof(SendApprovalEventActivity))]
@@ -28,5 +29,7 @@ public class SendApprovalEventActivity
         var eventContent = new SendEventUri(instanceId);
 
         await messages.AddAsync(Messaging.CreateMessage(eventContent));
+
+        _telemetryClient.TrackEvent("CreditRequestApproved", new Dictionary<string, string>{{"instanceId", instanceId}});
     }
 }
