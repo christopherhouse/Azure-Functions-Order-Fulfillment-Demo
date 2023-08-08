@@ -2,7 +2,14 @@ param keyVaultName string
 param location string
 param adminIdentities array
 param applicationIdentities array
+param pipelineServicePrincipalId string
+param logAnalyticsWorkspaceName string
 param tags object
+
+resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
+  name: logAnalyticsWorkspaceName
+  scope: resourceGroup()
+}
 
 var adminPolicies = [for id in adminIdentities: {
   tenantId: subscription().tenantId
@@ -18,13 +25,25 @@ var appPolicies = [for id in applicationIdentities: {
   tenantId: subscription().tenantId
   objectId: id
   permissions: {
-    secrets: ['Get'
+    secrets: [
+      'Get'
       'List'
   ]
   }
 }]
 
-var policies = union(adminPolicies, appPolicies)
+var pipelinePolicies = [{
+  tenantId: subscription().tenantId
+  objectId: pipelineServicePrincipalId
+  permissions: {
+    secrets: [ 
+    'Set'
+    'List'
+  ]
+  }
+}]
+
+var policies = union(adminPolicies, appPolicies, pipelinePolicies)
 
 resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   name: keyVaultName
@@ -38,7 +57,6 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
     tenantId: subscription().tenantId
     accessPolicies: policies
     softDeleteRetentionInDays: 7
-    enablePurgeProtection: true
     enableRbacAuthorization: false
     networkAcls: {
       bypass: 'AzureServices'
@@ -48,6 +66,27 @@ resource kv 'Microsoft.KeyVault/vaults@2019-09-01' = {
     }
   }
 }
+
+// CoPilot prompt:
+// Create a diagnostic setting for the key vault to send the allLogs category to the Log Analytics workspace
+// specified by the 'laws' variable
+// resource diags 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+//   name: 'laws'
+//   scope: kv
+//   properties: {
+//     workspaceId: laws.id
+//     logs: [
+//       {
+//         categoryGroup: 'allLogs'
+//         enabled: true
+//         retentionPolicy: {
+//           enabled: true
+//           days: 30
+//         }
+//       }
+//     ]
+//   }
+// }
 
 output id string = kv.id
 output name string = kv.name
