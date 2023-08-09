@@ -51,6 +51,7 @@ jobs:
       inputs:
         categories: 'IaC, secerts'
         tools: 'binskim, cred-scan'
+        config: '../config/secdevops-extension.json'
 
     - task: PublishPipelineArtifact@1
       displayName: Publish Infrastructure Artifacts

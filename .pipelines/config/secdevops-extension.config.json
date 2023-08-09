@@ -1,0 +1,13 @@
+{
+    "tools": [
+      {
+        "tool": {
+          "name": "CredScan",
+          "version": "Latest"
+        },
+        "arguments": {
+        }
+      }
+    ]
+  }
+  
