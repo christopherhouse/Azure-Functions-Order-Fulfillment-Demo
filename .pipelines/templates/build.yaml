@@ -49,7 +49,7 @@ jobs:
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
       inputs:
-        categories: 'IaC, secerts'
+        categories: 'IaC'
         tools: 'binskim'
         #config: '$(System.DefaultWorkingDirectory)/.infrastructure/pipelines/templates/secdevops-extension.json'
 
