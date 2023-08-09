@@ -11,7 +11,7 @@ parameters:
 
 stages:
   - stage: Deploy_to__${{ parameters.environmentName }}
-    displayName: Deploy to ${{ parameters.environmentName }}
+    displayName: Deploy to ${{ parameters.environmentName }
     jobs:
     - deployment: ${{ parameters.environmentName }}_Deployment
       displayName: ${{ parameters.environmentName }} Deployment
@@ -19,11 +19,11 @@ stages:
         vmImage: ubuntu-latest
       environment: ${{ parameters.environmentName }}
       variables:
-        infraTemplate: $(Pipeline.Workspace)\infrastructure\main.bicep
-        parameterFile: $(Pipeline.Workspace)\infrastructure\parameters\main.${{ parameters.environmentName }}.json
-        variableScriptFile: $(Pipeline.Workspace)\scripts\Set-PipelineVariablesFromDeploymentOutput.ps1
-        functionPackage: $(Pipeline.Workspace)\functionapp\functionapp.zip
-        setFunctionSecretScriptFile: $(Pipeline.Workspace)\scripts\set-function-key-secret.sh
+        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.bicep
+        parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
+        variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.ps1
+        functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
+        setFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/set-function-key-secret.sh
       strategy:
         runOnce:
           deploy:
