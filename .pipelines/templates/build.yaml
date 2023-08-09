@@ -50,7 +50,7 @@ jobs:
       displayName: 'Microsoft Security DevOps'
       inputs:
         categories: 'IaC, secerts'
-        tools: 'template-analyzer, binskim'      
+        # tools: 'template-analyzer, binskim'      
 
     - task: PublishPipelineArtifact@1
       displayName: Publish Infrastructure Artifacts
