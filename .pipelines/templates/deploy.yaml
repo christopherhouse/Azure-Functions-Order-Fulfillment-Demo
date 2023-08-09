@@ -23,6 +23,7 @@ stages:
         parameterFile: $(Pipeline.Workspace)/infrastructure/parameters/main.${{ parameters.environmentName }}.json
         variableScriptFile: $(Pipeline.Workspace)/scripts/Set-PipelineVariablesFromDeploymentOutput.ps1
         functionPackage: $(Pipeline.Workspace)/functionapp/functionapp.zip
+        setFunctionSecretScriptFile: $(Pipeline.Workspace)/scripts/set-function-key-secret.sh
       strategy:
         runOnce:
           deploy:
@@ -68,3 +69,12 @@ stages:
                 appType: functionAppLinux
                 appName: $(functionAppName)
                 package: $(functionPackage)
+
+            - task: AzureCLI@2
+              displayName: Set Function App Key
+              inputs:
+                azureSubscription: ${{ parameters.serviceConnectionName }}
+                scriptPath: $(setFunctionSecretScriptFile)
+                scriptType: bash
+                scriptLocation: scriptPath
+                arguments: ${{ parameters.resourceGroupName }} $(functionAppName) $(keyVaultName)
