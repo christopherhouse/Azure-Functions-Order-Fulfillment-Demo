@@ -30,7 +30,6 @@ public class CreateSalesOrder
     [OpenApiOperation(operationId: nameof(CreateSalesOrder), tags: new[] { "name" })]
     [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
     [OpenApiRequestBody("application/json", typeof(SubmitOrderRequest))]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Accepted, Description = "The Accepted response")]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
