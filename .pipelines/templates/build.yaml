@@ -53,11 +53,11 @@ jobs:
         zipAfterPublish: true
         workingDirectory: './'
 
-    - task: MicrosoftSecurityDevOps@1
-      displayName: 'Microsoft Security DevOps'
-      inputs:
-        categories: 'IaC'
-        tools: 'binskim'
+    # - task: MicrosoftSecurityDevOps@1
+    #   displayName: 'Microsoft Security DevOps'
+    #   inputs:
+    #     categories: 'IaC'
+    #     tools: 'binskim'
         #config: '$(System.DefaultWorkingDirectory)/.infrastructure/pipelines/templates/secdevops-extension.json'
 
     - task: PublishPipelineArtifact@1
