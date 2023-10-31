@@ -27,7 +27,7 @@ public class CreateSalesOrder
     }
 
     [FunctionName(nameof(CreateSalesOrder))]
-    [OpenApiOperation(operationId: "Run", tags: new[] { "name" })]
+    [OpenApiOperation(operationId: nameof(CreateSalesOrder), tags: new[] { "name" })]
     [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
     [OpenApiRequestBody("application/json", typeof(SubmitOrderRequest))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]

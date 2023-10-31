@@ -26,7 +26,7 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         }
 
         [FunctionName(nameof(CheckOrderStatus))]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "name" })]
+        [OpenApiOperation(operationId: nameof(CheckOrderStatus), tags: new[] { "name" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "customerId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **customerId** parameter")]
         [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **orderId** parameter")]
