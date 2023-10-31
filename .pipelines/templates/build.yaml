@@ -1,6 +1,13 @@
 parameters:
 - name: serviceConnectionName
   type: string
+- name: infraProvider
+  type: string
+  default: bicep
+  values:
+  - bicep
+  - tf
+
 jobs:
 - job: Build
   pool:
