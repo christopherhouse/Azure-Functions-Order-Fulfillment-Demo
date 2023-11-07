@@ -28,4 +28,4 @@ stages:
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: qa
-     resourceGroupName: 
+     resourceGroupName: ECL-APIM-PRD
