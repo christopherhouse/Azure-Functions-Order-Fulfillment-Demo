@@ -32,7 +32,7 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "The **orderId** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(OrderStatusResponse), Description = "The OK response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "orderStatus/{customerId}/{orderId}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "orderStatus/{customerId}/{orderId}")] HttpRequest req,
             [CosmosDB(databaseName: Settings.CosmosDatabaseNameSettingName,
                 containerName: Settings.OrdersContainerNameSettingName,
                 Connection = Connections.CosmosConnectionString,
