@@ -1,7 +1,7 @@
 using '../main.bicep'
 
-param workloadPrefix = 'cmh'
-param workloadName = 'orderfuncs'
+param workloadPrefix = 'sz'
+param workloadName = 'apim'
 param environmentName = 'dev'
 param location = 'eastus'
 param serviceBusSku = 'Standard'

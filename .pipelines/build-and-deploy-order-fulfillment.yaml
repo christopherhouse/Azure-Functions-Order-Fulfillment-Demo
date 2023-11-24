@@ -22,10 +22,10 @@ stages:
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: dev
-     resourceGroupName: ECL-APIM
+     resourceGroupName: SZ-APIM-DEV
 
  - template: templates/deploy.yaml
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: qa
-     resourceGroupName: ECL-APIM-QA
+     resourceGroupName: SZ-APIM-QA
