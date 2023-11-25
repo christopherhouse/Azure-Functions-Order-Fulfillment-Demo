@@ -3,13 +3,7 @@ param location string
 param adminIdentities array
 param applicationIdentities array
 param pipelineServicePrincipalId string
-param logAnalyticsWorkspaceName string
 param tags object
-
-resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
-  name: logAnalyticsWorkspaceName
-  scope: resourceGroup()
-}
 
 var adminPolicies = [for id in adminIdentities: {
   tenantId: subscription().tenantId

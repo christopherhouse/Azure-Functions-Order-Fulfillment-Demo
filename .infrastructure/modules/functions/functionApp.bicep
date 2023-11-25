@@ -15,14 +15,15 @@ param fulfillmentTopic string
 param approvedOrdersSubscription string
 param maxWorkDelayInMilliseconds int
 param cosmosLeaseContainerName string
-param logAnalyticsWorkspaceName string
 param webHookNotificationUrl string
 param functionAppKeyUri string
-
-resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
-  name: logAnalyticsWorkspaceName
-  scope: resourceGroup()
-}
+param ordersForApprovalSubscription string
+param shipmentTopicName string
+param shipmentTopicSubscriptionName string
+param statusNotificationTopic string
+param allStatusNotificationSubscription string
+param sendApprovalTopic string
+param allCreditApprovalsSubscription string
 
 resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
   name: storageAccountName
@@ -126,7 +127,35 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'functionAppBaseUrl'
-          value: 'https://{functionAppName}.azurewebsites.net}'
+          value: 'https://${functionAppName}.azurewebsites.net}'
+        }
+        {
+          name: 'ordersForApprovalSubscription'
+          value: ordersForApprovalSubscription
+        }
+        {
+          name: 'shipmentTopicName'
+          value: shipmentTopicName
+        }
+        {
+          name: 'shipmentTopicSubscriptionName'
+          value: shipmentTopicSubscriptionName
+        }
+        {
+          name: 'statusNotificationTopic'
+          value: statusNotificationTopic
+        }
+        {
+          name: 'allStatusNotificationSubscription'
+          value: allStatusNotificationSubscription
+        }
+        {
+          name: 'sendApprovalTopic'
+          value: sendApprovalTopic
+        }
+        {
+          name: 'allCreditApprovalsSubscription'
+          value: allCreditApprovalsSubscription
         }
       ]
     }

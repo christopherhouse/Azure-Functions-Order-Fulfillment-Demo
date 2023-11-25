@@ -34,7 +34,6 @@ param pipelineServicePrincipalId string
 
 param buildId int = 0
 
-var functionAppKeyName = 'app-key'
 var maxContainerRUs = 1000
 var defaultTopicSqlFilter = '1=1'
 var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
@@ -88,7 +87,6 @@ module sbNs './modules/serviceBus/serviceBusNamespace.bicep' = {
     serviceBusNamespaceName: serviceBusNamespaceName
     location: location
     serviceBusSku: serviceBusSku
-    logAnalyticsWorkspaceName: laws.outputs.id
     tags: tags
   }
 }
@@ -168,7 +166,6 @@ module kv './modules/keyVault/keyVault.bicep' = {
     location: location
     adminIdentities: keyVaultAdminIdentities
     applicationIdentities: [ funcUami.outputs.principalId ]
-    logAnalyticsWorkspaceName: laws.outputs.id
     pipelineServicePrincipalId: pipelineServicePrincipalId
     tags: tags
   }
@@ -220,10 +217,16 @@ module funcApp './modules/functions/functionApp.bicep' = {
     approvedOrdersSubscription: fulfillmentTopicSubscriptionName
     maxWorkDelayInMilliseconds: maxWorkDelayInMilliseconds
     cosmosLeaseContainerName: cosmosLeaseContainerName
-    logAnalyticsWorkspaceName: laws.outputs.id
     webHookNotificationUrl: webHookNotificationUrl
     functionAppKeyUri: secrets.outputs.functionAppKeyUri
     tags: tags
+    ordersForApprovalSubscription: ordersForApprovalSubscription.outputs.name
+    shipmentTopicName: shipmentTopic.outputs.name
+    shipmentTopicSubscriptionName: shipmentSubscription.outputs.name
+    statusNotificationTopic: statusTopic.outputs.name
+    allStatusNotificationSubscription: statusSub.outputs.name
+    sendApprovalTopic: sendApprovalEventTopic.outputs.name
+    allCreditApprovalsSubscription: sendApprovalAllMessages.outputs.name
   }
 }
 

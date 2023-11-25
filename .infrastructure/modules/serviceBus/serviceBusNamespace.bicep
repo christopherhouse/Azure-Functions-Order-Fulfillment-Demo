@@ -6,13 +6,7 @@ param location string
   'Premium'
 ])
 param serviceBusSku string
-param logAnalyticsWorkspaceName string
 param tags object
-
-resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
-  name: logAnalyticsWorkspaceName
-  scope: resourceGroup()
-}
 
 resource sbns 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
   name: serviceBusNamespaceName
