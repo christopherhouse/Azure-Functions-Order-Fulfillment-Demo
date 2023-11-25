@@ -119,7 +119,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'eventUriFormatString'
-          value: 'https://{functionAppName}.azurewebsites.net/runtime/webhooks/durabletask/instances/{instanceId}/CreditApproved&code={1}'
+          value: 'https://${functionAppName}.azurewebsites.net/runtime/webhooks/durabletask/instances/{0}/CreditApproved&code={1}'
         }
         {
           name: 'functionAppKey'
@@ -127,7 +127,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'functionAppBaseUrl'
-          value: 'https://${functionAppName}.azurewebsites.net}'
+          value: 'https://${functionAppName}.azurewebsites.net'
         }
         {
           name: 'ordersForApprovalSubscription'
