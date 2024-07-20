@@ -22,10 +22,10 @@ stages:
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: dev
-     resourceGroupName: FUNC-DEMO
+     resourceGroupName: ST-APIM-WS
 
- - template: templates/deploy.yaml
-   parameters:
-     serviceConnectionName: ${{ parameters.serviceConnectionName }}
-     environmentName: qa
-     resourceGroupName: FUNC-DEMO-QA
+#  - template: templates/deploy.yaml
+#    parameters:
+#      serviceConnectionName: ${{ parameters.serviceConnectionName }}
+#      environmentName: qa
+#      resourceGroupName: FUNC-DEMO-QA
