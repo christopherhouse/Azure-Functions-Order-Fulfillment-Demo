@@ -33,7 +33,7 @@ public class CreateSalesOrder
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Accepted, Description = "The Accepted response")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
         [ServiceBus("%ordersTopicName%", ServiceBusEntityType.Topic, Connection = Connections.ServiceBusConnectionString)] IAsyncCollector<ServiceBusMessage> topicOutput,
         [CosmosDB(databaseName: "%cosmosDbName%",
             containerName: "%ordersContainerName%",
