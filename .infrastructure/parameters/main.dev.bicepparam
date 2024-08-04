@@ -3,7 +3,7 @@ using '../main.bicep'
 param workloadPrefix = 'cmh'
 param workloadName = 'orderfuncs'
 param environmentName = 'dev'
-param location = 'eastus'
+param location = 'eastus2'
 param serviceBusSku = 'Standard'
 param maxTopicSize = 2048
 param ordersTopicName = 'received-orders'
