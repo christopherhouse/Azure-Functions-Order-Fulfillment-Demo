@@ -22,7 +22,7 @@ stages:
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: dev
-     resourceGroupName: ST-APIM-WS
+     resourceGroupName: CLIFFS-APIM-WS
 
 #  - template: templates/deploy.yaml
 #    parameters:
