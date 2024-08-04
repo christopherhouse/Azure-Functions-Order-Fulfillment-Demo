@@ -46,11 +46,11 @@ jobs:
         zipAfterPublish: true
         workingDirectory: './'
 
-    - task: MicrosoftSecurityDevOps@1
-      displayName: 'Microsoft Security DevOps'
-      # inputs:
-      #   categories: 'IaC, secerts, template-analyzer'
-      #   tools: 'terrascan, binskim'      
+    # - task: MicrosoftSecurityDevOps@1
+    #   displayName: 'Microsoft Security DevOps'
+    #   # inputs:
+    #   #   categories: 'IaC, secerts, template-analyzer'
+    #   #   tools: 'terrascan, binskim'      
 
     - task: PublishPipelineArtifact@1
       displayName: Publish Infrastructure Artifacts
