@@ -41,16 +41,16 @@ var baseName = '${workloadPrefix}-${workloadName}-${environmentName}'
 var baseNameNoDashes = replace(baseName, '-', '')
 
 // Resource Names
-var serviceBusNamespaceName = '${baseName}-sbns'
-var logAnalyticsWorkspaceName = '${baseName}-laws'
-var functionsAppInsightsName = '${baseName}-func-ai'
-var keyVaultName = '${baseName}-kv'
-var storageAccountName = length('${baseNameNoDashes}sa') > 24 ? toLower(substring('${baseNameNoDashes}sa', 0, 24)) : toLower('${baseNameNoDashes}sa')
-var functionAppServicePlanName = '${baseName}-func-asp'
-var functionAppName = '${baseName}-func'
-var functionAppUserAssignedIdentityName = '${functionAppName}-uami'
-var cosmosDbAccountName = '${baseName}-cdb-acct'
-var loadTestingName = '${baseName}-alt'
+var serviceBusNamespaceName = 'sbns-${baseName}'
+var logAnalyticsWorkspaceName = 'log-${baseName}'
+var functionsAppInsightsName = 'appi-${baseName}-func'
+var keyVaultName = 'kv-${baseName}'
+var storageAccountName = length('${baseNameNoDashes}sa') > 24 ? toLower(substring('sa${baseNameNoDashes}', 0, 24)) : toLower('sa${baseNameNoDashes}')
+var functionAppServicePlanName = 'asp-${baseName}-func'
+var functionAppName = 'func-${baseName}'
+var functionAppUserAssignedIdentityName = 'id-${functionAppName}'
+var cosmosDbAccountName = 'cosno-${baseName}'
+var loadTestingName = 'lt-${baseName}'
 
 // Deployment Names
 var serviceBusDeploymentName = '${serviceBusNamespaceName}-${buildId}'
