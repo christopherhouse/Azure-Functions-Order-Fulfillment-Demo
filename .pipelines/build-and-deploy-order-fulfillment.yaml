@@ -1,14 +1,11 @@
-parameters:
-- name: serviceConnectionName
-  displayName: Azure DeveOps Service Connection Name
-  type: string
-  default: 'Christopher House - Internal Demo Sub'
-
 trigger:
   branches:
     include:
      - '*'
 pr: none
+
+variables:
+  - group: 'order-fulfillment'
 
 stages:
  - stage: Build
@@ -16,16 +13,16 @@ stages:
    jobs:
    - template: templates/build.yaml
      parameters:
-       serviceConnectionName: ${{ parameters.serviceConnectionName }}
+       serviceConnectionName: $(SERVICE_CONNECTION_DEV) #${{ parameters.serviceConnectionName }}
 
  - template: templates/deploy.yaml
    parameters:
-     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     serviceConnectionName: $(SERVICE_CONNECTION_DEV) #${{ parameters.serviceConnectionName }}
      environmentName: dev
-     resourceGroupName: CLIFFS-APIM-WS
+     resourceGroupName: $(RESOURCE_GROUP_DEV)
 
 #  - template: templates/deploy.yaml
 #    parameters:
 #      serviceConnectionName: ${{ parameters.serviceConnectionName }}
 #      environmentName: qa
-#      resourceGroupName: FUNC-DEMO-QA
+#      resourceGroupName: $(RESOURCE_GROUP_QA)

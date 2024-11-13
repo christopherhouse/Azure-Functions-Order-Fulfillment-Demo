@@ -18,6 +18,7 @@ param cosmosLeaseContainerName string
 param logAnalyticsWorkspaceName string
 param webHookNotificationUrl string
 param functionAppKeyUri string
+param ordersForApprovalSubscriptionName string
 
 resource laws 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
   name: logAnalyticsWorkspaceName
@@ -127,6 +128,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'functionAppBaseUrl'
           value: 'https://{functionAppName}.azurewebsites.net}'
+        }
+        {
+          name: 'ordersForApprovalSubscription'
+          value: ordersForApprovalSubscriptionName
         }
       ]
     }

@@ -1,6 +1,6 @@
 using '../main.bicep'
 
-param workloadPrefix = 'sts-apim-ws'
+param workloadPrefix = 'cmhfuncs'
 param workloadName = 'order'
 param environmentName = 'dev'
 param location = 'eastus2'
@@ -12,7 +12,7 @@ param ordersForApprovalSubscriptionName = 'orders-requiring-approval'
 param ordersTopicSqlFilter = 'user.orderTotal <= 1000'
 param ordersForApprovalSqlFilter = 'user.orderTotal >= 1000'
 param fulfillmentTopicName = 'orders-for-fulfillment'
-param keyVaultAdminIdentities = ['c9be89aa-0783-4310-b73a-f81f4c3f5407']
+param keyVaultAdminIdentities = ['2ede4c0c-360b-47f8-80b0-bdba8badea7b']
 param cosmosDbDatabaseName = 'order-processing'
 param ordersCosmosContainerName = 'orders'
 param orderContainerPartitionKey = '/customerId'
@@ -25,4 +25,4 @@ param statusNotificationTopicSubscriptionName = 'all-status-notifications'
 param webHookNotificationUrl = 'https://webhook.site/a724d362-9cb1-4255-a7b0-6fc514165452'
 param sendApprovalTopicName = 'send-credit-approval'
 param allCreditApprovalsSubscription = 'all-messages'
-param pipelineServicePrincipalId = 'ff83a1e5-b4c1-4be3-a6dc-199514812166'
+param pipelineServicePrincipalId = '7bd78c67-feef-47dd-8ea6-290834596bb1'
