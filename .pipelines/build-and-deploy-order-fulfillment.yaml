@@ -10,6 +10,9 @@ trigger:
      - '*'
 pr: none
 
+variables:
+  - group: 'order-fulfillment'
+
 stages:
  - stage: Build
    displayName: Build Infrastructure and Code
@@ -22,10 +25,10 @@ stages:
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: dev
-     resourceGroupName: CLIFFS-APIM-WS
+     resourceGroupName: $(RESOURCE_GROUP_DEV)
 
 #  - template: templates/deploy.yaml
 #    parameters:
 #      serviceConnectionName: ${{ parameters.serviceConnectionName }}
 #      environmentName: qa
-#      resourceGroupName: FUNC-DEMO-QA
+#      resourceGroupName: $(RESOURCE_GROUP_QA)
