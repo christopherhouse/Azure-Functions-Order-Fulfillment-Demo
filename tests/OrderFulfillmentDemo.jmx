@@ -38,7 +38,7 @@
           </elementProp>
           <stringProp name="HTTPSampler.domain">${apimHostName}</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/ordering/CreateSalesOrder?subscription-key=${apimSubscriptionKey}</stringProp>
+          <stringProp name="HTTPSampler.path">/[ENTER APIM Suffix for Order Fulfillment API]/CreateSalesOrder?subscription-key=${apimSubscriptionKey}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
