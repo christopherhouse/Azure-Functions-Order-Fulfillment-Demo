@@ -130,7 +130,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: 'https://{functionAppName}.azurewebsites.net}'
         }
         {
-          name: 'ordersForApprovalSubscriptionName'
+          name: 'ordersForApprovalSubscription'
           value: ordersForApprovalSubscriptionName
         }
       ]
