@@ -224,6 +224,7 @@ module funcApp './modules/functions/functionApp.bicep' = {
     webHookNotificationUrl: webHookNotificationUrl
     functionAppKeyUri: secrets.outputs.functionAppKeyUri
     tags: tags
+    ordersForApprovalSubscriptionName: ordersForApprovalSubscriptionName
   }
 }
 
