@@ -13,16 +13,17 @@ stages:
    jobs:
    - template: templates/build.yaml
      parameters:
-       serviceConnectionName: $(SERVICE_CONNECTION_DEV) #${{ parameters.serviceConnectionName }}
+       serviceConnectionName: $(SERVICE_CONNECTION_DEV)
 
  - template: templates/deploy.yaml
    parameters:
-     serviceConnectionName: $(SERVICE_CONNECTION_DEV) #${{ parameters.serviceConnectionName }}
+     serviceConnectionName: $(SERVICE_CONNECTION_DEV)
      environmentName: dev
      resourceGroupName: $(RESOURCE_GROUP_DEV)
 
+# Uncommoent to deploy to QA.  Add more template references to deploy to other environements as needed
 #  - template: templates/deploy.yaml
 #    parameters:
-#      serviceConnectionName: ${{ parameters.serviceConnectionName }}
+#      serviceConnectionName: $(SERVICE_CONNECTION_QA)
 #      environmentName: qa
 #      resourceGroupName: $(RESOURCE_GROUP_QA)
