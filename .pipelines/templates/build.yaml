@@ -1,6 +1,3 @@
-parameters:
-- name: serviceConnectionName
-  type: string
 jobs:
 - job: Build
   pool:
