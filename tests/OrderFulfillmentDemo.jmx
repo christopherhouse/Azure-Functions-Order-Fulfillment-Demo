@@ -16,11 +16,11 @@
           <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">40</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">3</stringProp>
+        <stringProp name="ThreadGroup.num_threads">10</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">30</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">120</stringProp>
+        <stringProp name="ThreadGroup.duration">300</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -38,7 +38,7 @@
           </elementProp>
           <stringProp name="HTTPSampler.domain">${apimHostName}</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/[ENTER APIM Suffix for Order Fulfillment API]/CreateSalesOrder?subscription-key=${apimSubscriptionKey}</stringProp>
+          <stringProp name="HTTPSampler.path">/orders/2024-11-22/CreateSalesOrder?subscription-key=${apimSubscriptionKey}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -65,13 +65,13 @@
           <collectionProp name="Arguments.arguments">
             <elementProp name="apimHostName" elementType="Argument">
               <stringProp name="Argument.name">apimHostName</stringProp>
-              <stringProp name="Argument.value">[ENTER YOUR APIM HOST NAME HERE]</stringProp>
+              <stringProp name="Argument.value">apim-orders-eu2.azure-api.net</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="apimSubscriptionKey" elementType="Argument">
               <stringProp name="Argument.name">apimSubscriptionKey</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
-              <stringProp name="Argument.value">[ENTER APIM SUBSCRIPTION KEY HERE]</stringProp>
+              <stringProp name="Argument.value">e3389e0ecb5e4cb2bc53fe9bbda6d91f</stringProp>
             </elementProp>
           </collectionProp>
         </Arguments>
@@ -114,6 +114,43 @@
         </ResultCollector>
         <hashTree/>
       </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
