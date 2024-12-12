@@ -13,11 +13,11 @@ stages:
    jobs:
    - template: templates/build.yaml
      parameters:
-       serviceConnectionName: $(SERVICE_CONNECTION_DEV) #${{ parameters.serviceConnectionName }}
+       serviceConnectionName: $(SERVICE_CONNECTION_DEV)
 
  - template: templates/deploy.yaml
    parameters:
-     serviceConnectionName: $(SERVICE_CONNECTION_DEV) #${{ parameters.serviceConnectionName }}
+     serviceConnectionName: $(SERVICE_CONNECTION_DEV)
      environmentName: dev
      resourceGroupName: $(RESOURCE_GROUP_DEV)
 
