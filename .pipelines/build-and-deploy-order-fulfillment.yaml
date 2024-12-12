@@ -23,6 +23,6 @@ stages:
 
  - template: templates/deploy.yaml
    parameters:
-     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     serviceConnectionName: $(SERVICE_CONNECTION_QA)
      environmentName: qa
      resourceGroupName: $(RESOURCE_GROUP_QA)
