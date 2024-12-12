@@ -21,9 +21,8 @@ stages:
      environmentName: dev
      resourceGroupName: $(RESOURCE_GROUP_DEV)
 
-# Uncommoent to deploy to QA.  Add more template references to deploy to other environements as needed
-#  - template: templates/deploy.yaml
-#    parameters:
-#      serviceConnectionName: $(SERVICE_CONNECTION_QA)
-#      environmentName: qa
-#      resourceGroupName: $(RESOURCE_GROUP_QA)
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: qa
+     resourceGroupName: $(RESOURCE_GROUP_QA)
