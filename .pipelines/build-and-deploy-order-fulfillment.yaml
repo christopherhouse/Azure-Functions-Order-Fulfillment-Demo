@@ -21,8 +21,8 @@ stages:
      environmentName: dev
      resourceGroupName: $(RESOURCE_GROUP_DEV)
 
-#  - template: templates/deploy.yaml
-#    parameters:
-#      serviceConnectionName: ${{ parameters.serviceConnectionName }}
-#      environmentName: qa
-#      resourceGroupName: $(RESOURCE_GROUP_QA)
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: qa
+     resourceGroupName: $(RESOURCE_GROUP_QA)
