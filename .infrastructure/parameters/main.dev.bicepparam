@@ -1,6 +1,6 @@
 using '../main.bicep'
 
-param workloadPrefix = 'cmhfuncs'
+param workloadPrefix = 'ctvappi'
 param workloadName = 'order'
 param environmentName = 'dev'
 param location = 'eastus2'
