@@ -1,0 +1,20 @@
+// Send an HTTP post to the CreateSalesOrder HTTP triggered function
+// contained in this workspace.  The post body is a JSON object
+// based on the class SubmitOrderRequest in the project.
+POST https://func-ctvappi-order-dev.azurewebsites.net/api/CreateSalesOrder?code={{apiKey}}
+Content-Type: application/json
+
+{
+  "customerId": "123",
+  "total": 500,
+  "lineItems": [
+    {
+      "productNumber": "1",
+      "quantity": 2
+    },
+    {
+      "productId": "2",
+      "quantity": 3
+    }
+  ]
+}
