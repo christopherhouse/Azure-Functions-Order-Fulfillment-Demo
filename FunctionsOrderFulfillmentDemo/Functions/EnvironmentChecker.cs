@@ -15,9 +15,16 @@ namespace FunctionsOrderFulfillmentDemo.Functions
     {
         [FunctionName("EnvironmentChecker")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
+            // Check authentication based on feature flag
+            var authResult = AuthenticationHelper.ValidateAuthentication(req);
+            if (authResult != null)
+            {
+                return authResult;
+            }
+
             var results = new Dictionary<string, bool>();
 
             try

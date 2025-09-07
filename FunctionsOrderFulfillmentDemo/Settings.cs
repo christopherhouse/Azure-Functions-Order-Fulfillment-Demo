@@ -30,4 +30,8 @@ public static class Settings
     public static string FunctionAppKey => Environment.GetEnvironmentVariable("functionAppKey") ?? string.Empty;
 
     public static string FunctionAppHostName => Environment.GetEnvironmentVariable("functionAppHostName") ?? string.Empty;
+
+    // Feature flag to enable/disable authentication for HTTP endpoints
+    // Set to false to allow anonymous access, true to require function keys
+    public static bool EnableAuthentication => true;
 }

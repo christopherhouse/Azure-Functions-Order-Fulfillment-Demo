@@ -28,13 +28,20 @@ namespace FunctionsOrderFulfillmentDemo.Functions
         [OpenApiParameter(name: "orderId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "orderId")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "orderStatus/{customerId}/{orderId}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "orderStatus/{customerId}/{orderId}")] HttpRequest req,
             [CosmosDB(databaseName: Settings.CosmosDatabaseNameSettingName,
                 containerName: Settings.OrdersContainerNameSettingName,
                 Connection = Connections.CosmosConnectionString,
                 Id = "{orderId}",
                 PartitionKey = "{customerId}")] SubmitOrderRequest order)
         {
+            // Check authentication based on feature flag
+            var authResult = AuthenticationHelper.ValidateAuthentication(req);
+            if (authResult != null)
+            {
+                return authResult;
+            }
+
             IActionResult result;
 
             if (order != null)

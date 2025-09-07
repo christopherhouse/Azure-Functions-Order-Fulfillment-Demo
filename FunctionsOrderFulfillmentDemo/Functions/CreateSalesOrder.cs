@@ -33,12 +33,19 @@ public class CreateSalesOrder
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.Accepted, Description = "The Accepted response")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
         [ServiceBus("%ordersTopicName%", ServiceBusEntityType.Topic, Connection = Connections.ServiceBusConnectionString)] IAsyncCollector<ServiceBusMessage> topicOutput,
         [CosmosDB(databaseName: "%cosmosDbName%",
             containerName: "%ordersContainerName%",
             Connection = Connections.CosmosConnectionString)] IAsyncCollector<SubmitOrderRequest> cosmosOutput)
     {
+        // Check authentication based on feature flag
+        var authResult = AuthenticationHelper.ValidateAuthentication(req);
+        if (authResult != null)
+        {
+            return authResult;
+        }
+
         IActionResult result;
         using var reader = new StreamReader(req.Body);
         var requestBody = await reader.ReadToEndAsync();
